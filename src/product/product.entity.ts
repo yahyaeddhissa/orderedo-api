@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity({ name: "product" })
 export class ProductEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -9,5 +9,17 @@ export class ProductEntity {
   name: string;
 
   @Column()
-  about: string;
+  slug: string;
+
+  @Column()
+  shortDescription: string;
+
+  @Column()
+  longDescription: string;
+
+  @Column()
+  averageRating: number;
+
+  @Column()
+  reviewCount: number;
 }
