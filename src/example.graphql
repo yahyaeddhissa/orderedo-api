@@ -1,0 +1,7 @@
+type Query {
+  helloWorld: Message
+}
+
+type Message {
+  content: String
+}
