@@ -1,30 +1,59 @@
 type Query {
-  product(id: ID!): Product
-  products: [Product]
+  productSuggestion(id: ID!): Product
+  productSuggestions(id: ID!): [Product]
+
+  product(id: ID!): ProductSuggestion
+  products: [ProductSuggestion]
+}
+
+type Mutation {
+  createProductSuggestion(
+    input: CreateProductSuggestionInput!
+  ): ProductSuggestion
+  approveProductSuggestion(id: ID!): ProductSuggestion
+  rejectProductSuggestion(id: ID!): ProductSuggestion
+}
+
+enum ProductSuggestionStatus {
+  APPROVED
+  REJECTED
+  PENDING
+}
+
+type ProductSuggestion {
+  id: ID!
+  name: String
+  shortDescription: String
+  fullDescription: String
+  manufacturer: String
+  notes: String
+  status: ProductSuggestionStatus
+  author: User
+}
+
+input CreateProductSuggestionInput {
+  name: String
+  shortDescription: String
+  fullDescription: String
+  manufacturer: String
+  notes: String
+  authorId: ID!
 }
 
 type Product {
-  id: String
+  id: ID!
   slug: String
   name: String
   shortDescription: String
   averageRating: Float
   reviewCount: Int
-  longDescription: String
+  fullDescription: String
 }
 
 type ProductReview {
-  id: String
+  id: ID!
   title: String
   rating: Float
   publishDate: String
   author: User
-}
-
-type User {
-  id: String
-  username: String
-  email: String
-  name: String
-  isVerified: String
 }
