@@ -7,6 +7,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ProductModule } from "./product/product.module";
 import { UserModule } from "./user/user.module";
+import { join } from "path";
 
 const DatabaseModule = TypeOrmModule.forRoot({
   type: "postgres",
@@ -21,9 +22,10 @@ const DatabaseModule = TypeOrmModule.forRoot({
 
 const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
   driver: ApolloDriver,
-  typePaths: ["./**/*.graphql"],
+  // typePaths: ["./**/*.graphql"],
   playground: false,
   plugins: [ApolloServerPluginLandingPageLocalDefault()],
+  autoSchemaFile: join(process.cwd(), "src/schema.graphql"),
 });
 
 @Module({
