@@ -7,6 +7,7 @@ import {
 } from "./entities";
 import { Repository } from "typeorm";
 import {
+  Company,
   CompanySuggestion,
   CreateCompanySuggestionInput,
   CreateProductSuggestionInput,
@@ -15,7 +16,16 @@ import {
   SuggestionStatus,
 } from "./types";
 import slugify from "slugify";
+import { Injectable } from "@nestjs/common";
 
+/**
+ * Service for managing products and company suggestions.
+ *
+ * @remarks
+ * This service provides functionality for handling product-related operations
+ * and managing suggestions for new companies.
+ */
+@Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
@@ -65,7 +75,7 @@ export class ProductService {
    * @returns A Promise that resolves to the created CompanyEntity object.
    * @throws {Error} If there is an issue approving the suggestion or creating the company.
    */
-  async approveCompanySuggestion(id: string): Promise<CompanyEntity> {
+  async approveCompanySuggestion(id: string): Promise<Company> {
     const suggestion = await this.companySuggestionRepository.findOneBy({ id });
     suggestion.status = SuggestionStatus.APPROVED;
 
@@ -86,7 +96,7 @@ export class ProductService {
    * @returns A Promise that resolves to the rejected CompanySuggestionEntity object.
    * @throws {Error} If there is an issue rejecting the suggestion or updating its status.
    */
-  async rejectCompanySuggestion(id: string): Promise<CompanySuggestionEntity> {
+  async rejectCompanySuggestion(id: string): Promise<CompanySuggestion> {
     const suggestion = await this.companySuggestionRepository.findOneBy({ id });
     suggestion.status = SuggestionStatus.REJECTED;
 
