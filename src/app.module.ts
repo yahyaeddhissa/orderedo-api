@@ -4,7 +4,6 @@ import { AppService } from "./app.service";
 import { GraphQLModule as NestGraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
-import { MessageResolver } from "./message.resolver";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ProductModule } from "./product/product.module";
 import { UserModule } from "./user/user.module";
@@ -30,6 +29,6 @@ const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
 @Module({
   imports: [DatabaseModule, GraphQLModule, UserModule, ProductModule],
   controllers: [AppController],
-  providers: [AppService, MessageResolver],
+  providers: [AppService],
 })
 export class AppModule {}
