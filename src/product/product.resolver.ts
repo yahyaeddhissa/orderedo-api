@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { ProductService } from "./product.service";
 import {
   Company,
@@ -55,6 +55,19 @@ export class ProductResolver {
     @Args("id") id: string,
   ): Promise<CompanySuggestion> {
     return this.productService.rejectCompanySuggestion(id);
+  }
+
+  /**
+   * Query to fetch a specific product suggestion by ID.
+   *
+   * @param id - The identifier of the product suggestion.
+   * @returns A Promise that resolves to the ProductSuggestion object.
+   */
+  @Query("productSuggestion")
+  async getProductSuggestion(
+    @Args("id") id: string,
+  ): Promise<ProductSuggestion> {
+    return this.productService.getProductSuggestionById(id);
   }
 
   /**

@@ -41,11 +41,23 @@ export class ProductService {
     private readonly companySuggestionRepository: Repository<CompanySuggestionEntity>,
   ) {}
 
-  async findAll(): Promise<ProductEntity[]> {
-    return this.productRepository.find();
+  /**
+   * Fetches a specific product suggestion by ID.
+   *
+   * @param id - The identifier of the product suggestion.
+   * @returns A Promise that resolves to the ProductSuggestion object.
+   */
+  async getProductSuggestionById(id: string): Promise<ProductSuggestion> {
+    return this.productSuggestionRepository.findOneBy({ id });
   }
 
-  async findById(id: string): Promise<ProductEntity> {
+  /**
+   * Fetches a specific product by ID.
+   *
+   * @param id - The identifier of the product.
+   * @returns A Promise that resolves to the Product object.
+   */
+  async getProductById(id: string): Promise<Product> {
     return this.productRepository.findOneBy({ id });
   }
 
