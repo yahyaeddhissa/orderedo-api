@@ -3,6 +3,8 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserEntity } from "./entities";
 import { ProductSuggestionEntity } from "src/product/entities";
 import { CompanySuggestionEntity } from "src/company/entities";
+import { UserService } from "./user.service";
+import { UserResolver } from "./user.resolver";
 
 const TypeOrmEntities = TypeOrmModule.forFeature([
   UserEntity,
@@ -11,6 +13,7 @@ const TypeOrmEntities = TypeOrmModule.forFeature([
 ]);
 
 @Module({
+  providers: [UserService, UserResolver],
   imports: [TypeOrmEntities],
   exports: [TypeOrmModule],
 })

@@ -16,10 +16,10 @@ export class UserEntity {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ default: false })
   isVerified: boolean;
 
-  @Column()
+  @Column({ default: false })
   isMember: boolean;
 
   @OneToMany(() => ProductSuggestionEntity, (suggestion) => suggestion.author)

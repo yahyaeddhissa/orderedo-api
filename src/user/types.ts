@@ -6,3 +6,9 @@ export interface User {
   isVerified: boolean;
   isMember: boolean;
 }
+
+export interface CreateUserInput {
+  name: string;
+  username: string;
+  email: string;
+}
