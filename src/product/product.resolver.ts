@@ -64,10 +64,19 @@ export class ProductResolver {
    * @returns A Promise that resolves to the ProductSuggestion object.
    */
   @Query("productSuggestion")
-  async getProductSuggestion(
-    @Args("id") id: string,
-  ): Promise<ProductSuggestion> {
+  async productSuggestion(@Args("id") id: string): Promise<ProductSuggestion> {
     return this.productService.getProductSuggestionById(id);
+  }
+
+  /**
+   * Query to fetch a specific product by ID.
+   *
+   * @param id - The identifier of the product.
+   * @returns A Promise that resolves to the Product object.
+   */
+  @Query("product")
+  async product(@Args("id") id: string): Promise<Product> {
+    return this.productService.getProductById(id);
   }
 
   /**

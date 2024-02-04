@@ -1,9 +1,7 @@
 type Query {
-  productSuggestion(id: ID!): Product
-  productSuggestions(id: ID!): [Product]
+  productSuggestion(id: ID!): ProductSuggestion
 
-  product(id: ID!): ProductSuggestion
-  products: [ProductSuggestion]
+  product(id: ID!): Product
 }
 
 type Mutation {
