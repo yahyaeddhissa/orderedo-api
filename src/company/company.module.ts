@@ -14,4 +14,4 @@ const TypeOrmEntities = TypeOrmModule.forFeature([
   imports: [TypeOrmEntities],
   exports: [TypeOrmModule],
 })
-export class ProductModule {}
+export class CompanyModule {}

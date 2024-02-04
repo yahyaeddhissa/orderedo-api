@@ -8,7 +8,7 @@ import { Company } from "src/company/models";
 import { SuggestionStatus } from "src/shared/types/suggestion-status";
 import { User } from "src/user/models/user.model";
 
-registerEnumType(SuggestionStatus);
+registerEnumType(SuggestionStatus, { name: "SuggestionStatus" });
 
 @ObjectType()
 export class ProductSuggestion {

@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CompanyEntity, CompanySuggestionEntity } from "./entities";
 import { Repository } from "typeorm";
-import {
+import type {
   Company,
   CompanySuggestion,
   CreateCompanySuggestionInput,

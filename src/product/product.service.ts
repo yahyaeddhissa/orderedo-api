@@ -3,7 +3,7 @@ import { ProductEntity, ProductSuggestionEntity } from "./entities";
 import { Repository } from "typeorm";
 import slugify from "slugify";
 import { Injectable } from "@nestjs/common";
-import {
+import type {
   CreateProductSuggestionInput,
   Product,
   ProductSuggestion,

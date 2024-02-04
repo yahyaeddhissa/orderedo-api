@@ -1,0 +1,92 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: String!
+  username: String!
+  email: String!
+  name: String!
+  isVerified: Boolean!
+  isMember: Boolean!
+}
+
+type CompanySuggestion {
+  id: String!
+  name: String!
+  status: SuggestionStatus!
+  author: User!
+  notes: String!
+}
+
+enum SuggestionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+type Company {
+  id: String!
+  name: String!
+  products: [Product!]!
+  productSuggestions: [ProductSuggestion!]!
+}
+
+type ProductSuggestion {
+  id: String!
+  name: String!
+  manufacturer: Company!
+  shortDescription: String!
+  fullDescription: String!
+  notes: String!
+  status: SuggestionStatus!
+  author: User!
+}
+
+type Product {
+  id: String!
+  name: String!
+  slug: String!
+  shortDescription: String!
+  fullDescription: String!
+  averageRating: Float!
+  reviewCount: Float!
+  manufacturer: Company!
+}
+
+type Query {
+  productSuggestion(id: String!): ProductSuggestion!
+  product(id: String!): Product!
+  users: [User!]!
+}
+
+type Mutation {
+  createCompanySuggestion(input: CreateCompanySuggestionInput!): CompanySuggestion!
+  approveCompanySuggestion(id: String!): Company!
+  rejectCompanySuggestion(id: String!): CompanySuggestion!
+  createProductSuggestion(input: CreateProductSuggestionInput!): ProductSuggestion!
+  approveProductSuggestion(id: String!): Product!
+  rejectProductSuggestion(id: String!): ProductSuggestion!
+  createUser(input: CreateUserInput!): User!
+}
+
+input CreateCompanySuggestionInput {
+  name: String!
+  notes: String!
+  authorId: String!
+}
+
+input CreateProductSuggestionInput {
+  name: String!
+  shortDescription: String!
+  fullDescription: String!
+  notes: String!
+  authorId: String!
+  manufacturerId: String!
+}
+
+input CreateUserInput {
+  name: String!
+  username: String!
+  email: String!
+}
