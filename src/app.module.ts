@@ -22,7 +22,6 @@ const DatabaseModule = TypeOrmModule.forRoot({
 
 const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
   driver: ApolloDriver,
-  // typePaths: ["./**/*.graphql"],
   playground: false,
   plugins: [ApolloServerPluginLandingPageLocalDefault()],
   autoSchemaFile: join(process.cwd(), "src/schema.graphql"),
