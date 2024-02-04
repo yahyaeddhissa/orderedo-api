@@ -7,6 +7,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin
 import { MessageResolver } from "./message.resolver";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { ProductModule } from "./product/product.module";
+import { UserModule } from "./user/user.module";
 
 const DatabaseModule = TypeOrmModule.forRoot({
   type: "postgres",
@@ -27,7 +28,7 @@ const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
 });
 
 @Module({
-  imports: [DatabaseModule, GraphQLModule, ProductModule],
+  imports: [DatabaseModule, GraphQLModule, UserModule, ProductModule],
   controllers: [AppController],
   providers: [AppService, MessageResolver],
 })
