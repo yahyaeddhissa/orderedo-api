@@ -1,6 +1,5 @@
 type Query {
   productSuggestion(id: ID!): ProductSuggestion
-
   product(id: ID!): Product
 }
 
@@ -10,37 +9,6 @@ type Mutation {
   ): ProductSuggestion
   approveProductSuggestion(id: ID!): ProductSuggestion
   rejectProductSuggestion(id: ID!): ProductSuggestion
-
-  createCompanySuggestion(
-    input: CreateCompanySuggestionInput!
-  ): CompanySuggestion
-  approveCompanySuggestion(id: ID!): CompanySuggestion
-  rejectCompanySuggestion(id: ID!): ProductSuggestion
-}
-
-enum SuggestionStatus {
-  APPROVED
-  REJECTED
-  PENDING
-}
-
-input CreateCompanySuggestionInput {
-  name: String
-  notes: String
-  authorId: ID!
-}
-
-type CompanySuggestion {
-  id: ID!
-  name: String
-  notes: String
-  status: SuggestionStatus
-  author: User
-}
-
-type Company {
-  id: ID!
-  name: String
 }
 
 type ProductSuggestion {

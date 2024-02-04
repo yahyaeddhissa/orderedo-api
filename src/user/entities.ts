@@ -1,7 +1,5 @@
-import {
-  CompanySuggestionEntity,
-  ProductSuggestionEntity,
-} from "src/product/entities";
+import { CompanySuggestionEntity } from "src/company/entities";
+import { ProductSuggestionEntity } from "src/product/entities";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "user" })

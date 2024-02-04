@@ -1,7 +1,7 @@
 import { UserEntity } from "src/user/entities";
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
 import { SuggestionStatus } from "../types";
-import { CompanyEntity } from "./company.entity";
+import { CompanyEntity } from "../../company/entities/company.entity";
 
 @Entity({ name: "product_suggestion" })
 export class ProductSuggestionEntity {
