@@ -6,8 +6,8 @@ import {
   Company,
   CompanySuggestion,
   CreateCompanySuggestionInput,
-  SuggestionStatus,
-} from "../product/types";
+} from "./models";
+import { SuggestionStatus } from "src/product/types";
 
 @Injectable()
 export class CompanyService {

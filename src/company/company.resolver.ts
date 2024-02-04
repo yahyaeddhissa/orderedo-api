@@ -4,9 +4,9 @@ import {
   Company,
   CompanySuggestion,
   CreateCompanySuggestionInput,
-} from "../product/types";
+} from "./models";
 
-@Resolver("Company")
+@Resolver(() => Company)
 export class CompanyResolver {
   constructor(private readonly companyService: CompanyService) {}
 
@@ -16,7 +16,7 @@ export class CompanyResolver {
    * @param input - The input data for creating the company suggestion.
    * @returns A Promise that resolves to the created Company object.
    */
-  @Mutation()
+  @Mutation(() => CompanySuggestion)
   async createCompanySuggestion(
     @Args("input") input: CreateCompanySuggestionInput,
   ): Promise<CompanySuggestion> {
@@ -29,7 +29,7 @@ export class CompanyResolver {
    * @param id - The identifier of the company suggestion to be approved.
    * @returns A Promise that resolves to the created Company object.
    */
-  @Mutation()
+  @Mutation(() => Company)
   async approveCompanySuggestion(@Args("id") id: string): Promise<Company> {
     return this.companyService.approveCompanySuggestion(id);
   }
@@ -40,7 +40,7 @@ export class CompanyResolver {
    * @param id - The identifier of the company suggestion to be rejected.
    * @returns A Promise that resolves to the rejected CompanySuggestion object.
    */
-  @Mutation()
+  @Mutation(() => CompanySuggestion)
   async rejectCompanySuggestion(
     @Args("id") id: string,
   ): Promise<CompanySuggestion> {

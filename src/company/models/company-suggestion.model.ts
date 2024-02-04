@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import { User } from "src/user/models/user.model";
 
 @ObjectType()
@@ -21,4 +21,16 @@ export class CompanySuggestion {
 
   @Field()
   notes: string;
+}
+
+@InputType()
+export class CreateCompanySuggestionInput {
+  @Field()
+  name: string;
+
+  @Field()
+  notes: string;
+
+  @Field()
+  authorId: string;
 }
