@@ -1,4 +1,9 @@
-import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
+import {
+  Field,
+  InputType,
+  ObjectType,
+  registerEnumType,
+} from "@nestjs/graphql";
 import { Company } from "src/company/models";
 import { SuggestionStatus } from "src/shared/types/suggestion-status";
 import { User } from "src/user/models/user.model";
@@ -30,4 +35,25 @@ export class ProductSuggestion {
 
   @Field(() => User)
   author: User;
+}
+
+@InputType()
+export class CreateProductSuggestionInput {
+  @Field()
+  name: string;
+
+  @Field()
+  shortDescription: string;
+
+  @Field()
+  fullDescription: string;
+
+  @Field()
+  notes: string;
+
+  @Field()
+  authorId: string;
+
+  @Field()
+  manufacturerId: string;
 }

@@ -4,7 +4,7 @@ import {
   CreateProductSuggestionInput,
   Product,
   ProductSuggestion,
-} from "./types";
+} from "./models";
 
 /**
  * GraphQL resolver for product-related and company-related operations.
@@ -13,7 +13,7 @@ import {
  * This resolver provides query mutation methods for reading, creating, approving, and rejecting
  * product and company suggestions.
  */
-@Resolver("Product")
+@Resolver(() => Product)
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
@@ -23,7 +23,7 @@ export class ProductResolver {
    * @param id - The identifier of the product suggestion.
    * @returns A Promise that resolves to the ProductSuggestion object.
    */
-  @Query("productSuggestion")
+  @Query(() => ProductSuggestion)
   async productSuggestion(@Args("id") id: string): Promise<ProductSuggestion> {
     return this.productService.getProductSuggestionById(id);
   }
@@ -34,7 +34,7 @@ export class ProductResolver {
    * @param id - The identifier of the product.
    * @returns A Promise that resolves to the Product object.
    */
-  @Query("product")
+  @Query(() => Product)
   async product(@Args("id") id: string): Promise<Product> {
     return this.productService.getProductById(id);
   }
@@ -45,7 +45,7 @@ export class ProductResolver {
    * @param input - The input data for creating the product suggestion.
    * @returns A Promise that resolves to the created Product object.
    */
-  @Mutation()
+  @Mutation(() => ProductSuggestion)
   async createProductSuggestion(
     @Args("input") input: CreateProductSuggestionInput,
   ): Promise<ProductSuggestion> {
@@ -58,7 +58,7 @@ export class ProductResolver {
    * @param id - The identifier of the product suggestion to be approved.
    * @returns A Promise that resolves to the created Product object.
    */
-  @Mutation()
+  @Mutation(() => Product)
   async approveProductSuggestion(@Args("id") id: string): Promise<Product> {
     return this.productService.approveProductSuggestion(id);
   }
@@ -69,7 +69,7 @@ export class ProductResolver {
    * @param id - The identifier of the product suggestion to be rejected.
    * @returns A Promise that resolves to the rejected ProductSuggestion object.
    */
-  @Mutation()
+  @Mutation(() => ProductSuggestion)
   async rejectProductSuggestion(
     @Args("id") id: string,
   ): Promise<ProductSuggestion> {

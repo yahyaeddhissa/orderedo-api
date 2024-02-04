@@ -1,14 +1,14 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { ProductEntity, ProductSuggestionEntity } from "./entities";
 import { Repository } from "typeorm";
+import slugify from "slugify";
+import { Injectable } from "@nestjs/common";
 import {
   CreateProductSuggestionInput,
   Product,
   ProductSuggestion,
-  SuggestionStatus,
-} from "./types";
-import slugify from "slugify";
-import { Injectable } from "@nestjs/common";
+} from "./models";
+import { SuggestionStatus } from "src/shared/types/suggestion-status";
 
 /**
  * Service for managing products and company suggestions.
