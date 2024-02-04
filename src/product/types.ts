@@ -1,5 +1,19 @@
 import { User } from "src/user/types";
 
+export interface CompanySuggestion {
+  id: string;
+  name: string;
+  notes: string;
+  status: SuggestionStatus;
+  author: User;
+}
+
+export interface CreateCompanySuggestionInput {
+  name: string;
+  notes: string;
+  authorId: string;
+}
+
 export interface Company {
   id: string;
   name: string;
@@ -16,7 +30,7 @@ export interface Product {
   fullDescription: string;
 }
 
-export enum ProductSuggestionStatus {
+export enum SuggestionStatus {
   PENDING = "PENDING",
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",
@@ -29,7 +43,7 @@ export interface ProductSuggestion {
   fullDescription: string;
   manufacturer: Company;
   notes: string;
-  status: ProductSuggestionStatus;
+  status: SuggestionStatus;
   author: Partial<User>;
 }
 
@@ -37,7 +51,7 @@ export interface CreateProductSuggestionInput {
   name: string;
   shortDescription: string;
   fullDescription: string;
-  manufacturerName: string;
   notes: string;
   authorId: string;
+  manufacturerId: string;
 }

@@ -5,8 +5,33 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { ProductSuggestionStatus } from "./types";
+import { SuggestionStatus } from "./types";
 import { UserEntity } from "src/user/entities";
+
+@Entity({ name: "company_suggestion" })
+export class CompanySuggestionEntity {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Column()
+  name: string;
+
+  @Column({
+    type: "enum",
+    enum: SuggestionStatus,
+    default: SuggestionStatus.PENDING,
+  })
+  status: SuggestionStatus;
+
+  @ManyToOne(() => UserEntity, (user) => user.companySuggestions)
+  author: UserEntity;
+
+  @Column()
+  authorId: string;
+
+  @Column()
+  notes: string;
+}
 
 @Entity({ name: "company" })
 export class CompanyEntity {
@@ -21,7 +46,7 @@ export class CompanyEntity {
 
   @OneToMany(
     () => ProductSuggestionEntity,
-    (ProductSuggestion) => ProductSuggestion.manufacturer,
+    (suggestion) => suggestion.manufacturer,
   )
   productSuggestions: ProductSuggestionEntity[];
 }
@@ -38,6 +63,9 @@ export class ProductSuggestionEntity {
   manufacturer: CompanyEntity;
 
   @Column()
+  manufacturerId: string;
+
+  @Column()
   shortDescription: string;
 
   @Column()
@@ -48,13 +76,16 @@ export class ProductSuggestionEntity {
 
   @Column({
     type: "enum",
-    enum: ProductSuggestionStatus,
-    default: ProductSuggestionStatus.PENDING,
+    enum: SuggestionStatus,
+    default: SuggestionStatus.PENDING,
   })
-  status: ProductSuggestionStatus;
+  status: SuggestionStatus;
 
   @ManyToOne(() => UserEntity, (user) => user.productSuggestions)
   author: UserEntity;
+
+  @Column()
+  authorId: string;
 }
 
 @Entity({ name: "product" })
@@ -82,4 +113,7 @@ export class ProductEntity {
 
   @ManyToOne(() => CompanyEntity, (company) => company.products)
   manufacturer: CompanyEntity;
+
+  @Column()
+  manufacturerId: string;
 }
