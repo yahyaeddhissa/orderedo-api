@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./entities";
 import { Repository } from "typeorm";
-import { CreateUserInput, User } from "./types";
+import { CreateUserInput, User } from "./models/user.model";
 
 /**
  * Service for managing user-related operations.
@@ -19,7 +19,8 @@ export class UserService {
   ) {}
 
   async users(): Promise<User[]> {
-    return this.userRepository.find();
+    const users = await this.userRepository.find();
+    return User.fromEntities(users);
   }
 
   /**
@@ -29,7 +30,8 @@ export class UserService {
    * @returns A Promise that resolves to the created User object.
    */
   async createUser(data: CreateUserInput): Promise<User> {
-    const user = this.userRepository.create(data);
-    return this.userRepository.save(user);
+    const userEntity = this.userRepository.create(data);
+    const user = await this.userRepository.save(userEntity);
+    return User.fromEntity(user);
   }
 }

@@ -1,12 +1,52 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
+import { CompanySuggestion } from "src/company/models";
+import { ProductSuggestion } from "src/product/models";
+import { UserEntity } from "../entities";
 
+/**
+ * Represents a user in the system.
+ *
+ * @remarks
+ * This class serves as a GraphQL ObjectType, DTO (Data Transfer Object), and
+ * business object representing user information.
+ */
 @ObjectType()
 export class User {
-  @Field()
-  id: string;
+  /**
+   * Creates a User object based on a UserEntity.
+   *
+   * @param userEntity - The UserEntity from the database.
+   * @returns A User object created from the UserEntity.
+   */
+  public static fromEntity({
+    id,
+    firstName,
+    lastName,
+    email,
+    isMember,
+    isVerified,
+  }: UserEntity): User {
+    return {
+      id,
+      name: `${firstName} ${lastName}`,
+      email,
+      isMember,
+      isVerified,
+    };
+  }
+
+  /**
+   * Creates an array of User objects based on an array of UserEntity objects.
+   *
+   * @param userEntities - An array of UserEntity objects from the database.
+   * @returns An array of User objects created from the UserEntity objects.
+   */
+  public static fromEntities(userEntities: UserEntity[]): User[] {
+    return userEntities.map(User.fromEntity);
+  }
 
   @Field()
-  username: string;
+  id: string;
 
   @Field()
   email: string;
@@ -19,16 +59,29 @@ export class User {
 
   @Field()
   isMember: boolean;
+
+  @Field(() => [ProductSuggestion])
+  productSuggestions?: ProductSuggestion[];
+
+  @Field(() => [CompanySuggestion])
+  companySuggestions?: CompanySuggestion[];
 }
 
+/**
+ * Represents the input data for creating a new user.
+ *
+ * @remarks
+ * This class serves as a GraphQL InputType, defining the expected input structure
+ * for creating a new user.
+ */
 @InputType()
 export class CreateUserInput {
   @Field()
   name: string;
 
   @Field()
-  username: string;
+  email: string;
 
   @Field()
-  email: string;
+  password: string;
 }

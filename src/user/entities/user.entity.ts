@@ -7,14 +7,17 @@ export class UserEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
-  username: string;
-
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
-  name: string;
+  password: string;
+
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
 
   @Column({ default: false })
   isVerified: boolean;
