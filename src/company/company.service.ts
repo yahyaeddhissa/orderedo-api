@@ -20,6 +20,36 @@ export class CompanyService {
   ) {}
 
   /**
+   * Retrieves multiple company suggestions based on their IDs.
+   *
+   * @param ids - An array of identifiers for the company suggestions.
+   * @returns A Promise that resolves to an array of CompanySuggestion objects.
+   */
+  public async getCompanySuggestions(): Promise<CompanySuggestion[]> {
+    return CompanySuggestion.fromEntities(
+      await this.companySuggestionRepository.find(),
+    );
+  }
+
+  /**
+   * Retrieves a company suggestion by its ID.
+   *
+   * @param id - The identifier of the company suggestion.
+   * @returns A Promise that resolves to the CompanySuggestion object.
+   */
+  async getCompanySuggestionById(id: string): Promise<CompanySuggestion> {
+    const companySuggestion = await this.companySuggestionRepository.findOneBy({
+      id,
+    });
+
+    if (!companySuggestion) {
+      throw new Error(`Company suggestion with ID ${id} not found.`);
+    }
+
+    return CompanySuggestion.fromEntity(companySuggestion);
+  }
+
+  /**
    * Creates a new company suggestion.
    *
    * @param input - The input data for creating the company suggestion.

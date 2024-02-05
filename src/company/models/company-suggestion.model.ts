@@ -18,6 +18,13 @@ export class CompanySuggestion {
       status,
     };
   }
+
+  public static fromEntities(
+    entities: CompanySuggestionEntity[],
+  ): CompanySuggestion[] {
+    return entities.map(this.fromEntity);
+  }
+
   @Field()
   id: string;
 
