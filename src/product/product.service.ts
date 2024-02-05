@@ -3,7 +3,7 @@ import { ProductEntity, ProductSuggestionEntity } from "./entities";
 import { Repository } from "typeorm";
 import slugify from "slugify";
 import { Injectable } from "@nestjs/common";
-import type {
+import {
   CreateProductSuggestionInput,
   Product,
   ProductSuggestion,
@@ -34,7 +34,8 @@ export class ProductService {
    * @returns A Promise that resolves to the ProductSuggestion object.
    */
   async getProductSuggestionById(id: string): Promise<ProductSuggestion> {
-    return this.productSuggestionRepository.findOneBy({ id });
+    const suggestion = await this.productSuggestionRepository.findOneBy({ id });
+    return ProductSuggestion.fromEntity(suggestion);
   }
 
   /**
@@ -57,8 +58,10 @@ export class ProductService {
   async createProductSuggestion(
     input: CreateProductSuggestionInput,
   ): Promise<ProductSuggestion> {
-    const suggestion = this.productSuggestionRepository.create(input);
-    return this.productSuggestionRepository.save(suggestion);
+    const suggestionEntity = this.productSuggestionRepository.create(input);
+    const suggestion =
+      await this.productSuggestionRepository.save(suggestionEntity);
+    return ProductSuggestion.fromEntity(suggestion);
   }
 
   /**
@@ -97,6 +100,8 @@ export class ProductService {
     const suggestion = await this.productSuggestionRepository.findOneBy({ id });
     suggestion.status = SuggestionStatus.REJECTED;
 
-    return this.productSuggestionRepository.save(suggestion);
+    return ProductSuggestion.fromEntity(
+      await this.productSuggestionRepository.save(suggestion),
+    );
   }
 }
