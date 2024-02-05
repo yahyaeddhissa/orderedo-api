@@ -1,5 +1,0 @@
-enum SuggestionStatus {
-  APPROVED
-  REJECTED
-  PENDING
-}
