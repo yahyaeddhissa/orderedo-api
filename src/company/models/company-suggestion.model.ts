@@ -1,9 +1,23 @@
 import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import { SuggestionStatus } from "src/shared/types/suggestion-status";
 import { User } from "src/user/models/user.model";
+import { CompanySuggestionEntity } from "../entities";
 
 @ObjectType()
 export class CompanySuggestion {
+  public static fromEntity({
+    id,
+    name,
+    notes,
+    status,
+  }: CompanySuggestionEntity): CompanySuggestion {
+    return {
+      id,
+      name,
+      notes,
+      status,
+    };
+  }
   @Field()
   id: string;
 
@@ -14,7 +28,7 @@ export class CompanySuggestion {
   status: SuggestionStatus;
 
   @Field(() => User)
-  author: User;
+  author?: User;
 
   @Field()
   notes: string;
