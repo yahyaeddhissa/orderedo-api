@@ -3,13 +3,13 @@
 # ------------------------------------------------------
 
 type User {
-  id: String!
+  id: ID!
   email: String!
   name: String!
   isVerified: Boolean!
   isMember: Boolean!
-  productSuggestions: [ProductSuggestion!]!
-  companySuggestions: [CompanySuggestion!]!
+  productSuggestions: [ProductSuggestion!]
+  companySuggestions: [CompanySuggestion!]
 }
 
 type CompanySuggestion {
@@ -87,7 +87,8 @@ input CreateProductSuggestionInput {
 }
 
 input CreateUserInput {
-  name: String!
+  firstName: String!
+  lastName: String!
   email: String!
   password: String!
 }

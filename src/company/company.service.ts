@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CompanyEntity, CompanySuggestionEntity } from "./entities";
 import { Repository } from "typeorm";
-import type {
+import {
   Company,
   CompanySuggestion,
   CreateCompanySuggestionInput,
@@ -35,7 +35,7 @@ export class CompanyService {
     const createdSuggestion =
       await this.companySuggestionRepository.save(suggestion);
 
-    return createdSuggestion;
+    return CompanySuggestion.fromEntity(createdSuggestion);
   }
 
   /**
@@ -56,7 +56,7 @@ export class CompanyService {
     const company = await this.companyRepository.save(companyEntity);
     await this.companySuggestionRepository.save(suggestion);
 
-    return company;
+    return Company.fromEntity(company);
   }
 
   /**
@@ -73,6 +73,6 @@ export class CompanyService {
     const rejectedSuggestion =
       await this.companySuggestionRepository.save(suggestion);
 
-    return rejectedSuggestion;
+    return CompanySuggestion.fromEntity(rejectedSuggestion);
   }
 }
