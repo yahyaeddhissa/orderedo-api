@@ -1,8 +1,28 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Company } from "src/company/models";
+import { ProductEntity } from "../entities";
 
 @ObjectType()
 export class Product {
+  public static fromEntity({
+    id,
+    name,
+    slug,
+    shortDescription,
+    fullDescription,
+    reviewCount,
+    averageRating,
+  }: ProductEntity): Product {
+    return {
+      id,
+      name,
+      slug,
+      shortDescription,
+      fullDescription,
+      reviewCount,
+      averageRating,
+    };
+  }
   @Field()
   id: string;
 
@@ -25,5 +45,5 @@ export class Product {
   reviewCount: number;
 
   @Field(() => Company)
-  manufacturer: Company;
+  manufacturer?: Company;
 }

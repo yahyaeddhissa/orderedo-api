@@ -45,7 +45,7 @@ export class ProductService {
    * @returns A Promise that resolves to the Product object.
    */
   async getProductById(id: string): Promise<Product> {
-    return this.productRepository.findOneBy({ id });
+    return Product.fromEntity(await this.productRepository.findOneBy({ id }));
   }
 
   /**
@@ -86,7 +86,7 @@ export class ProductService {
     const product = await this.productRepository.save(productEntity);
     await this.productSuggestionRepository.save(suggestion);
 
-    return product;
+    return Product.fromEntity(product);
   }
 
   /**
