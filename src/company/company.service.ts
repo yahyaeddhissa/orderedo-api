@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CompanyEntity, CompanySuggestionEntity } from "./entities";
 import { Repository } from "typeorm";
@@ -27,7 +27,9 @@ export class CompanyService {
    */
   public async getCompanySuggestions(): Promise<CompanySuggestion[]> {
     return CompanySuggestion.fromEntities(
-      await this.companySuggestionRepository.find(),
+      await this.companySuggestionRepository.find({
+        relations: { author: true, company: true },
+      }),
     );
   }
 
@@ -38,8 +40,9 @@ export class CompanyService {
    * @returns A Promise that resolves to the CompanySuggestion object.
    */
   async getCompanySuggestionById(id: string): Promise<CompanySuggestion> {
-    const companySuggestion = await this.companySuggestionRepository.findOneBy({
-      id,
+    const companySuggestion = await this.companySuggestionRepository.findOne({
+      where: { id },
+      relations: { author: true, company: true },
     });
 
     if (!companySuggestion) {
@@ -75,18 +78,33 @@ export class CompanyService {
    * @returns A Promise that resolves to the created CompanyEntity object.
    * @throws {Error} If there is an issue approving the suggestion or creating the company.
    */
-  async approveCompanySuggestion(id: string): Promise<Company> {
+  async approveCompanySuggestion(id: string): Promise<CompanySuggestion> {
     const suggestion = await this.companySuggestionRepository.findOneBy({ id });
     suggestion.status = SuggestionStatus.APPROVED;
 
-    const companyEntity = this.companyRepository.create({
-      name: suggestion.name,
-    });
+    if (!suggestion.company) {
+      const companyEntity = this.companyRepository.create({
+        name: suggestion.name,
+      });
+      const company = await this.companyRepository.save(companyEntity);
+      suggestion.companyId = company.id;
+    } else {
+      await this.companyRepository.update(suggestion.id, {
+        name: suggestion.name,
+      });
+    }
 
-    const company = await this.companyRepository.save(companyEntity);
-    await this.companySuggestionRepository.save(suggestion);
-
-    return Company.fromEntity(company);
+    return CompanySuggestion.fromEntity(
+      await this.companySuggestionRepository.findOne({
+        where: {
+          id: (await this.companySuggestionRepository.save(suggestion)).id,
+        },
+        relations: {
+          author: true,
+          company: true,
+        },
+      }),
+    );
   }
 
   /**
@@ -104,5 +122,22 @@ export class CompanyService {
       await this.companySuggestionRepository.save(suggestion);
 
     return CompanySuggestion.fromEntity(rejectedSuggestion);
+  }
+
+  /**
+   * Retrieves a company by its ID.
+   *
+   * @param id - The identifier of the company.
+   * @returns A Promise that resolves to the Company object.
+   * @throws {NotFoundException} If the company with the specified ID is not found.
+   */
+  async getCompanyById(id: string): Promise<Company> {
+    const company = await this.companyRepository.findOneBy({ id });
+
+    if (!company) {
+      throw new NotFoundException(`Company with ID ${id} not found.`);
+    }
+
+    return Company.fromEntity(company);
   }
 }

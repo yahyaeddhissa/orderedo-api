@@ -1,6 +1,4 @@
 import { Field, ID, InputType, ObjectType } from "@nestjs/graphql";
-import { CompanySuggestion } from "src/company/models";
-import { ProductSuggestion } from "src/product/models";
 import { UserEntity } from "../entities";
 
 /**
@@ -60,11 +58,11 @@ export class User {
   @Field()
   isMember: boolean;
 
-  @Field(() => [ProductSuggestion], { nullable: true, defaultValue: [] })
-  productSuggestions?: ProductSuggestion[];
+  // @Field(() => [ProductSuggestion], { nullable: true, defaultValue: [] })
+  // productSuggestions?: ProductSuggestion[];
 
-  @Field(() => [CompanySuggestion], { nullable: true, defaultValue: [] })
-  companySuggestions?: CompanySuggestion[];
+  // @Field(() => [CompanySuggestion], { nullable: true, defaultValue: [] })
+  // companySuggestions?: CompanySuggestion[];
 }
 
 /**

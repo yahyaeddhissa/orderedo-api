@@ -2,6 +2,7 @@ import { Field, InputType, ObjectType } from "@nestjs/graphql";
 import { SuggestionStatus } from "src/shared/types/suggestion-status";
 import { User } from "src/user/models/user.model";
 import { CompanySuggestionEntity } from "../entities";
+import { Company } from ".";
 
 @ObjectType()
 export class CompanySuggestion {
@@ -10,12 +11,16 @@ export class CompanySuggestion {
     name,
     notes,
     status,
+    author,
+    company,
   }: CompanySuggestionEntity): CompanySuggestion {
     return {
       id,
       name,
       notes,
       status,
+      author: User.fromEntity(author),
+      company: company ? Company.fromEntity(company) : null,
     };
   }
 
@@ -39,6 +44,13 @@ export class CompanySuggestion {
 
   @Field()
   notes: string;
+
+  @Field(() => Company, {
+    nullable: true,
+    description:
+      "Refers to the company the suggestion refers to. Null if it's a new company suggestion.",
+  })
+  company?: Company;
 }
 
 @InputType()

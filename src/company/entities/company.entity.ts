@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { ProductEntity, ProductSuggestionEntity } from "src/product/entities";
+import { CompanySuggestionEntity } from ".";
 
 @Entity({ name: "company" })
 export class CompanyEntity {
@@ -17,4 +18,7 @@ export class CompanyEntity {
     (suggestion) => suggestion.manufacturer,
   )
   productSuggestions: ProductSuggestionEntity[];
+
+  @OneToMany(() => CompanySuggestionEntity, (suggestion) => suggestion.company)
+  changeSuggestions?: CompanySuggestionEntity[];
 }

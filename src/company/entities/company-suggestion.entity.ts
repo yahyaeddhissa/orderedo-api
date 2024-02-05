@@ -1,6 +1,7 @@
 import { UserEntity } from "src/user/entities";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { SuggestionStatus } from "src/product/types";
+import { CompanyEntity } from ".";
 
 @Entity({ name: "company_suggestion" })
 export class CompanySuggestionEntity {
@@ -25,4 +26,12 @@ export class CompanySuggestionEntity {
 
   @Column()
   notes: string;
+
+  @ManyToOne(() => CompanyEntity, (company) => company.changeSuggestions, {
+    nullable: true,
+  })
+  company?: CompanyEntity;
+
+  @Column({ nullable: true })
+  companyId: string;
 }
