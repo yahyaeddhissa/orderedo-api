@@ -26,8 +26,8 @@ export class UserEntity {
   isMember: boolean;
 
   @OneToMany(() => ProductSuggestionEntity, (suggestion) => suggestion.author)
-  productSuggestions: ProductSuggestionEntity[];
+  productSuggestions?: ProductSuggestionEntity[];
 
   @OneToMany(() => CompanySuggestionEntity, (suggestion) => suggestion.author)
-  companySuggestions: ProductSuggestionEntity[];
+  companySuggestions?: ProductSuggestionEntity[];
 }

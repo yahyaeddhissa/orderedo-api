@@ -16,14 +16,10 @@ export class User {
    * @param userEntity - The UserEntity from the database.
    * @returns A User object created from the UserEntity.
    */
-  public static fromEntity({
-    id,
-    firstName,
-    lastName,
-    email,
-    isMember,
-    isVerified,
-  }: UserEntity): User {
+  public static fromEntity(entity: UserEntity): User {
+    if (!entity) return null;
+    const { id, firstName, lastName, email, isMember, isVerified } = entity;
+
     return {
       id,
       name: `${firstName} ${lastName}`,
@@ -57,12 +53,6 @@ export class User {
 
   @Field()
   isMember: boolean;
-
-  // @Field(() => [ProductSuggestion], { nullable: true, defaultValue: [] })
-  // productSuggestions?: ProductSuggestion[];
-
-  // @Field(() => [CompanySuggestion], { nullable: true, defaultValue: [] })
-  // companySuggestions?: CompanySuggestion[];
 }
 
 /**
