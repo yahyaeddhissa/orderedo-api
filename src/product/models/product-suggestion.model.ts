@@ -4,12 +4,20 @@ import {
   ObjectType,
   registerEnumType,
 } from "@nestjs/graphql";
-import { Company } from "src/company/models";
 import { SuggestionStatus } from "src/shared/types/suggestion-status";
 import { User } from "src/user/models/user.model";
 import { ProductSuggestionEntity } from "../entities";
 
 registerEnumType(SuggestionStatus, { name: "SuggestionStatus" });
+
+@ObjectType()
+class ProductSuggestionManufacturer {
+  @Field()
+  id: string;
+
+  @Field()
+  name: string;
+}
 
 @ObjectType()
 export class ProductSuggestion {
@@ -31,6 +39,12 @@ export class ProductSuggestion {
     };
   }
 
+  public static fromEntities(
+    entities: ProductSuggestionEntity[],
+  ): ProductSuggestion[] {
+    return entities.map(this.fromEntity);
+  }
+
   @Field()
   id: string;
 
@@ -38,8 +52,8 @@ export class ProductSuggestion {
   name: string;
 
   // Create a custom ProductSuggestionCompany type in order to avoid circular dependency
-  @Field(() => Company)
-  manufacturer?: Company;
+  @Field(() => ProductSuggestionManufacturer)
+  manufacturer?: ProductSuggestionManufacturer;
 
   @Field()
   shortDescription: string;

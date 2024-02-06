@@ -1,6 +1,14 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Company } from "src/company/models";
 import { ProductEntity } from "../entities";
+
+@ObjectType()
+class ProductManufacturer {
+  @Field()
+  id: string;
+
+  @Field()
+  name: string;
+}
 
 @ObjectType()
 export class Product {
@@ -23,6 +31,11 @@ export class Product {
       averageRating,
     };
   }
+
+  public static fromEntities(entities: ProductEntity[]): Product[] {
+    return entities.map(this.fromEntity);
+  }
+
   @Field()
   id: string;
 
@@ -44,6 +57,6 @@ export class Product {
   @Field()
   reviewCount: number;
 
-  @Field(() => Company)
-  manufacturer?: Company;
+  @Field(() => ProductManufacturer)
+  manufacturer?: ProductManufacturer;
 }

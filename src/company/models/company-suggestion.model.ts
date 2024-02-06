@@ -5,22 +5,26 @@ import { CompanySuggestionEntity } from "../entities";
 import { Company } from ".";
 
 @ObjectType()
+class CompanySuggestionCompany {
+  @Field()
+  id: string;
+
+  @Field()
+  name: string;
+}
+
+@ObjectType()
 export class CompanySuggestion {
-  public static fromEntity({
-    id,
-    name,
-    notes,
-    status,
-    author,
-    company,
-  }: CompanySuggestionEntity): CompanySuggestion {
+  public static fromEntity(entity: CompanySuggestionEntity): CompanySuggestion {
+    if (!entity) return undefined;
+    const { id, name, notes, status, author, company } = entity;
     return {
       id,
       name,
       notes,
       status,
       author: author && User.fromEntity(author),
-      company: company ? Company.fromEntity(company) : null,
+      company: company && Company.fromEntity(company),
     };
   }
 
@@ -46,12 +50,12 @@ export class CompanySuggestion {
   @Field()
   notes: string;
 
-  @Field(() => Company, {
+  @Field(() => CompanySuggestionCompany, {
     nullable: true,
     description:
       "Refers to the company the suggestion refers to. Null if it's a new company suggestion.",
   })
-  company?: Company;
+  company?: CompanySuggestionCompany;
 }
 
 @InputType()

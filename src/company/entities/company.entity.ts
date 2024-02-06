@@ -11,13 +11,13 @@ export class CompanyEntity {
   name: string;
 
   @OneToMany(() => ProductEntity, (product) => product.manufacturer)
-  products: ProductEntity[];
+  products?: ProductEntity[];
 
   @OneToMany(
     () => ProductSuggestionEntity,
     (suggestion) => suggestion.manufacturer,
   )
-  productSuggestions: ProductSuggestionEntity[];
+  productSuggestions?: ProductSuggestionEntity[];
 
   @OneToMany(() => CompanySuggestionEntity, (suggestion) => suggestion.company)
   suggestions?: CompanySuggestionEntity[];
