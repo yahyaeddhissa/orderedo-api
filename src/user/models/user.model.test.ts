@@ -25,6 +25,17 @@ describe("User", () => {
       const user = User.fromEntity(null);
       expect(user).toBeNull();
     });
+
+    it("should handle invalid or incomplete data", () => {
+      const userEntity: Partial<UserEntity> = {
+        id: "1",
+        firstName: "John",
+      };
+      const user = User.fromEntity(userEntity);
+      expect(user.name).toBe(`${userEntity.firstName} undefined`);
+      expect(user.isMember).toBeUndefined();
+      expect(user.isVerified).toBeUndefined();
+    });
   });
 
   describe("fromEntities", () => {

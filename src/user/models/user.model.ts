@@ -16,7 +16,7 @@ export class User {
    * @param userEntity - The UserEntity from the database.
    * @returns A User object created from the UserEntity.
    */
-  public static fromEntity(entity: UserEntity): User {
+  public static fromEntity(entity: Partial<UserEntity>): User {
     if (!entity) return null;
     const { id, firstName, lastName, email, isMember, isVerified } = entity;
 
