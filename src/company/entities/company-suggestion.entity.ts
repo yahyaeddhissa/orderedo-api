@@ -22,7 +22,7 @@ export class CompanySuggestionEntity {
   author: UserEntity;
 
   @Column()
-  authorId: string;
+  authorId?: string;
 
   @Column()
   notes: string;
@@ -33,5 +33,5 @@ export class CompanySuggestionEntity {
   company?: CompanyEntity;
 
   @Column({ nullable: true })
-  companyId: string;
+  companyId?: string;
 }

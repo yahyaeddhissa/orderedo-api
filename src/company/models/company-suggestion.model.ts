@@ -15,7 +15,9 @@ class CompanySuggestionCompany {
 
 @ObjectType()
 export class CompanySuggestion {
-  public static fromEntity(entity: CompanySuggestionEntity): CompanySuggestion {
+  public static fromEntity(
+    entity: Partial<CompanySuggestionEntity>,
+  ): CompanySuggestion {
     if (!entity) return undefined;
     const { id, name, notes, status, author, company } = entity;
     return {
@@ -31,7 +33,6 @@ export class CompanySuggestion {
   public static fromEntities(
     entities: CompanySuggestionEntity[],
   ): CompanySuggestion[] {
-    if (!entities) return [];
     return entities.map(this.fromEntity);
   }
 
