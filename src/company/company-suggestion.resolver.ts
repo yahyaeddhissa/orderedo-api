@@ -1,19 +1,21 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { CompanySuggestion, CreateCompanySuggestionInput } from "./models";
-import { CompanyService } from "./company.service";
+import { CompanySuggestionService } from "./company-suggestion.service";
 
 @Resolver(() => CompanySuggestion)
 export class CompanySuggestionResolver {
-  constructor(private readonly companyService: CompanyService) {}
+  constructor(
+    private readonly companySuggestionService: CompanySuggestionService,
+  ) {}
 
   @Query(() => [CompanySuggestion])
   public async companySuggestions(): Promise<CompanySuggestion[]> {
-    return this.companyService.getCompanySuggestions();
+    return this.companySuggestionService.getCompanySuggestions();
   }
 
   @Query(() => CompanySuggestion)
   public async companySuggestion(@Args("id") id: string) {
-    return this.companyService.getCompanySuggestionById(id);
+    return this.companySuggestionService.getCompanySuggestionById(id);
   }
 
   /**
@@ -26,7 +28,7 @@ export class CompanySuggestionResolver {
   public async createCompanySuggestion(
     @Args("input") input: CreateCompanySuggestionInput,
   ): Promise<CompanySuggestion> {
-    return this.companyService.createCompanySuggestion(input);
+    return this.companySuggestionService.createCompanySuggestion(input);
   }
 
   /**
@@ -39,7 +41,7 @@ export class CompanySuggestionResolver {
   public async approveCompanySuggestion(
     @Args("id") id: string,
   ): Promise<CompanySuggestion> {
-    return this.companyService.approveCompanySuggestion(id);
+    return this.companySuggestionService.approveCompanySuggestion(id);
   }
 
   /**
@@ -52,6 +54,6 @@ export class CompanySuggestionResolver {
   public async rejectCompanySuggestion(
     @Args("id") id: string,
   ): Promise<CompanySuggestion> {
-    return this.companyService.rejectCompanySuggestion(id);
+    return this.companySuggestionService.rejectCompanySuggestion(id);
   }
 }

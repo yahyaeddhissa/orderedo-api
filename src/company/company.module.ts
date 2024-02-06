@@ -4,6 +4,7 @@ import { CompanyEntity, CompanySuggestionEntity } from "./entities";
 import { CompanyService } from "./company.service";
 import { CompanyResolver } from "./company.resolver";
 import { CompanySuggestionResolver } from "./company-suggestion.resolver";
+import { CompanySuggestionService } from "./company-suggestion.service";
 
 const TypeOrmEntities = TypeOrmModule.forFeature([
   CompanyEntity,
@@ -11,7 +12,12 @@ const TypeOrmEntities = TypeOrmModule.forFeature([
 ]);
 
 @Module({
-  providers: [CompanyService, CompanyResolver, CompanySuggestionResolver],
+  providers: [
+    CompanyService,
+    CompanySuggestionService,
+    CompanyResolver,
+    CompanySuggestionResolver,
+  ],
   imports: [TypeOrmEntities],
   exports: [TypeOrmModule],
 })
