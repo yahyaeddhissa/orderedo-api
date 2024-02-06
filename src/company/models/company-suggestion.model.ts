@@ -19,7 +19,7 @@ export class CompanySuggestion {
       name,
       notes,
       status,
-      author: User.fromEntity(author),
+      author: author && User.fromEntity(author),
       company: company ? Company.fromEntity(company) : null,
     };
   }
