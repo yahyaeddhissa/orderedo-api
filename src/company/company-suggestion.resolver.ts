@@ -8,13 +8,13 @@ export class CompanySuggestionResolver {
     private readonly companySuggestionService: CompanySuggestionService,
   ) {}
 
-  @Query(() => [CompanySuggestion])
-  public async companySuggestions(): Promise<CompanySuggestion[]> {
+  @Query(() => [CompanySuggestion], { name: "companySuggestions" })
+  public async getCompanySuggestions(): Promise<CompanySuggestion[]> {
     return this.companySuggestionService.getCompanySuggestions();
   }
 
-  @Query(() => CompanySuggestion)
-  public async companySuggestion(@Args("id") id: string) {
+  @Query(() => CompanySuggestion, { name: "companySuggestion" })
+  public async getCompanySuggestion(@Args("id") id: string) {
     return this.companySuggestionService.getCompanySuggestionById(id);
   }
 

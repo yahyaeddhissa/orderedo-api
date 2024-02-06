@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CompanySuggestionEntity } from "./entities";
 import { Repository } from "typeorm";
@@ -76,6 +76,23 @@ export class CompanySuggestionService {
    */
   async approveCompanySuggestion(id: string): Promise<CompanySuggestion> {
     const suggestion = await this.companySuggestionRepository.findOneBy({ id });
+
+    if ((suggestion.status = SuggestionStatus.REJECTED)) {
+      throw new BadRequestException("The suggestion is already rejected.");
+    }
+
+    if ((suggestion.status = SuggestionStatus.APPROVED)) {
+      throw new BadRequestException("The suggestion is already approved.");
+    }
+
+    const exists = await this.companyService.findCompany({
+      name: suggestion.name,
+    });
+
+    if (exists) {
+      throw new BadRequestException("A company with this name already exists.");
+    }
+
     suggestion.status = SuggestionStatus.APPROVED;
 
     if (!suggestion.company) {
