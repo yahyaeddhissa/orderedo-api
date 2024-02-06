@@ -27,6 +27,7 @@ export class CompanySuggestion {
   public static fromEntities(
     entities: CompanySuggestionEntity[],
   ): CompanySuggestion[] {
+    if (!entities) return [];
     return entities.map(this.fromEntity);
   }
 

@@ -20,5 +20,5 @@ export class CompanyEntity {
   productSuggestions: ProductSuggestionEntity[];
 
   @OneToMany(() => CompanySuggestionEntity, (suggestion) => suggestion.company)
-  changeSuggestions?: CompanySuggestionEntity[];
+  suggestions?: CompanySuggestionEntity[];
 }

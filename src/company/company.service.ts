@@ -22,7 +22,16 @@ export class CompanyService {
     id?: string;
     name?: string;
   }): Promise<Company | null> {
-    const company = await this.companyRepository.findOneBy(by);
+    const company = await this.companyRepository.findOne({
+      where: by,
+      relations: {
+        suggestions: {
+          author: true,
+        },
+      },
+    });
+
+    console.log(company);
 
     if (!company) {
       return null;

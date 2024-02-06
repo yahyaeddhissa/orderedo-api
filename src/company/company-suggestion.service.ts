@@ -22,11 +22,13 @@ export class CompanySuggestionService {
    * @returns A Promise that resolves to an array of CompanySuggestion objects.
    */
   public async getCompanySuggestions(): Promise<CompanySuggestion[]> {
-    return CompanySuggestion.fromEntities(
-      await this.companySuggestionRepository.find({
-        relations: { author: true, company: true },
-      }),
-    );
+    const suggestions = await this.companySuggestionRepository.find({
+      relations: { author: true, company: true },
+    });
+
+    if (!suggestions) return [];
+
+    return CompanySuggestion.fromEntities(suggestions);
   }
 
   /**

@@ -27,7 +27,7 @@ export class CompanySuggestionEntity {
   @Column()
   notes: string;
 
-  @ManyToOne(() => CompanyEntity, (company) => company.changeSuggestions, {
+  @ManyToOne(() => CompanyEntity, (company) => company.suggestions, {
     nullable: true,
   })
   company?: CompanyEntity;
