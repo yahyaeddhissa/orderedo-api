@@ -1,6 +1,12 @@
 import { UserEntity } from "src/user/entities";
 import { CompanyEntity } from "src/company/entities";
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  type Relation,
+} from "typeorm";
 import { SuggestionStatus } from "../types";
 
 @Entity({ name: "product_suggestion" })
@@ -12,7 +18,7 @@ export class ProductSuggestionEntity {
   name: string;
 
   @ManyToOne(() => CompanyEntity, (company) => company.productSuggestions)
-  manufacturer: CompanyEntity;
+  manufacturer: Relation<CompanyEntity>;
 
   @Column()
   manufacturerId: string;
@@ -34,7 +40,7 @@ export class ProductSuggestionEntity {
   status: SuggestionStatus;
 
   @ManyToOne(() => UserEntity, (user) => user.productSuggestions)
-  author: UserEntity;
+  author: Relation<UserEntity>;
 
   @Column()
   authorId: string;

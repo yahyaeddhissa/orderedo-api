@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  type Relation,
+} from "typeorm";
 import { CompanyEntity } from "src/company/entities";
 
 @Entity({ name: "product" })
@@ -25,7 +31,7 @@ export class ProductEntity {
   reviewCount: number;
 
   @ManyToOne(() => CompanyEntity, (company) => company.products)
-  manufacturer: CompanyEntity;
+  manufacturer: Relation<CompanyEntity>;
 
   @Column()
   manufacturerId: string;

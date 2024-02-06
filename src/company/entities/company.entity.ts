@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  type Relation,
+} from "typeorm";
 import { ProductEntity, ProductSuggestionEntity } from "src/product/entities";
 import { CompanySuggestionEntity } from ".";
 
@@ -11,7 +17,7 @@ export class CompanyEntity {
   name: string;
 
   @OneToMany(() => ProductEntity, (product) => product.manufacturer)
-  products?: ProductEntity[];
+  products?: Relation<ProductEntity>[];
 
   @OneToMany(
     () => ProductSuggestionEntity,
@@ -20,5 +26,5 @@ export class CompanyEntity {
   productSuggestions?: ProductSuggestionEntity[];
 
   @OneToMany(() => CompanySuggestionEntity, (suggestion) => suggestion.company)
-  suggestions?: CompanySuggestionEntity[];
+  suggestions?: Relation<CompanySuggestionEntity>[];
 }
