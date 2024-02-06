@@ -77,11 +77,11 @@ export class CompanySuggestionService {
   async approveCompanySuggestion(id: string): Promise<CompanySuggestion> {
     const suggestion = await this.companySuggestionRepository.findOneBy({ id });
 
-    if ((suggestion.status = SuggestionStatus.REJECTED)) {
+    if (suggestion.status === SuggestionStatus.REJECTED) {
       throw new BadRequestException("The suggestion is already rejected.");
     }
 
-    if ((suggestion.status = SuggestionStatus.APPROVED)) {
+    if (suggestion.status === SuggestionStatus.APPROVED) {
       throw new BadRequestException("The suggestion is already approved.");
     }
 
