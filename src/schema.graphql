@@ -59,6 +59,7 @@ type Product {
 }
 
 type Query {
+  company(id: ID!): Company!
   companySuggestions: [CompanySuggestion!]!
   companySuggestion(id: String!): CompanySuggestion!
   productSuggestion(id: String!): ProductSuggestion!

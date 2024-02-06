@@ -18,11 +18,14 @@ export class CompanyService {
    * @returns A Promise that resolves to the Company object.
    * @throws {NotFoundException} If the company with the specified ID is not found.
    */
-  async getCompanyById(id: string): Promise<Company> {
-    const company = await this.companyRepository.findOneBy({ id });
+  async findCompany(by: {
+    id?: string;
+    name?: string;
+  }): Promise<Company | null> {
+    const company = await this.companyRepository.findOneBy(by);
 
     if (!company) {
-      throw new NotFoundException(`Company with ID ${id} not found.`);
+      return null;
     }
 
     return Company.fromEntity(company);
