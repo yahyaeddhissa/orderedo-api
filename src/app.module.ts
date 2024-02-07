@@ -9,6 +9,8 @@ import { UserModule } from "./user/user.module";
 import { join } from "path";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { UserEntity } from "./user/entities";
+import { ProductModule } from "./product/product.module";
+import { ReviewModule } from "./review/review.module";
 
 const DatabaseModule = TypeOrmModule.forRoot({
   type: "postgres",
@@ -26,13 +28,20 @@ const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
   autoSchemaFile: join(process.cwd(), "src/schema.graphql"),
   playground: false,
   plugins: [ApolloServerPluginLandingPageLocalDefault()],
-  include: [UserModule],
+  include: [UserModule, ProductModule, ReviewModule],
 });
 
 const EventsModule = EventEmitterModule.forRoot();
 
 @Module({
-  imports: [DatabaseModule, GraphQLModule, EventsModule, UserModule],
+  imports: [
+    DatabaseModule,
+    GraphQLModule,
+    EventsModule,
+    UserModule,
+    ProductModule,
+    ReviewModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

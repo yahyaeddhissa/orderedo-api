@@ -10,7 +10,39 @@ type User {
   isMember: Boolean!
 }
 
+type Product {
+  id: ID!
+  name: String!
+  slug: String!
+  shortDescription: String!
+  fullDescription: String!
+  averageRating: Float!
+}
+
+type ReviewProduct {
+  id: String!
+  name: String!
+  slug: String!
+}
+
+type ReviewAuthor {
+  id: ID!
+  name: String!
+  isVerified: Boolean!
+  isMember: Boolean!
+}
+
+type Review {
+  id: ID!
+  author: ReviewAuthor!
+  product: ReviewProduct!
+  rating: Float!
+  content: String!
+}
+
 type Query {
+  review: Review!
+  product: Product!
   users: [User!]!
 }
 
