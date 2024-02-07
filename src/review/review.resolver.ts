@@ -17,6 +17,10 @@ const review: Review = {
     isVerified: false,
     name: "Yahya Eddhissa",
   },
+  approver: {
+    id: "9545456",
+    name: "Hanabi Hyuga",
+  },
 };
 
 @Resolver(() => Review)

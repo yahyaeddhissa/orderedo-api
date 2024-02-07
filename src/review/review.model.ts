@@ -28,6 +28,15 @@ export class ReviewAuthor {
 }
 
 @ObjectType()
+export class ReviewApprover {
+  @Field(() => ID)
+  id: string;
+
+  @Field()
+  name: string;
+}
+
+@ObjectType()
 export class Review {
   @Field(() => ID)
   id: string;
@@ -43,4 +52,7 @@ export class Review {
 
   @Field()
   content: string;
+
+  @Field(() => ReviewApprover)
+  approver: ReviewApprover;
 }

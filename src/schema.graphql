@@ -32,12 +32,18 @@ type ReviewAuthor {
   isMember: Boolean!
 }
 
+type ReviewApprover {
+  id: ID!
+  name: String!
+}
+
 type Review {
   id: ID!
   author: ReviewAuthor!
   product: ReviewProduct!
   rating: Float!
   content: String!
+  approver: ReviewApprover!
 }
 
 type Query {
