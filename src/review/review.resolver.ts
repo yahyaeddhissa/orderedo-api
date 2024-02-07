@@ -1,4 +1,4 @@
-import { Query, Resolver } from "@nestjs/graphql";
+import { Args, Query, Resolver } from "@nestjs/graphql";
 import { Review } from "./review.model";
 
 const review: Review = {
@@ -28,5 +28,11 @@ export class ReviewResolver {
   @Query(() => Review, { name: "review" })
   public async getReview(): Promise<Review> {
     return Promise.resolve(review);
+  }
+
+  @Query(() => [Review], { name: "productReviews" })
+  public async getProductReviews(@Args("id") id: string): Promise<Review[]> {
+    console.log(id);
+    return Promise.resolve([review, review, review]);
   }
 }

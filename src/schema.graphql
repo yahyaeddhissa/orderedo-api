@@ -48,6 +48,7 @@ type Review {
 
 type Query {
   review: Review!
+  productReviews(id: String!): [Review!]!
   product: Product!
   users: [User!]!
 }
