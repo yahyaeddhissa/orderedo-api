@@ -48,8 +48,6 @@ describe("UserService", () => {
         ...createUserInput,
         isMember: false,
         isVerified: false,
-        companySuggestions: [],
-        productSuggestions: [],
       };
       const createdUser: UserEntity = {
         ...newUserEntity,

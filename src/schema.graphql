@@ -10,102 +10,12 @@ type User {
   isMember: Boolean!
 }
 
-type ProductSuggestionManufacturer {
-  id: String!
-  name: String!
-}
-
-type ProductSuggestion {
-  id: String!
-  name: String!
-  manufacturer: ProductSuggestionManufacturer!
-  shortDescription: String!
-  fullDescription: String!
-  notes: String!
-  status: SuggestionStatus!
-  author: User!
-}
-
-enum SuggestionStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
-type ProductManufacturer {
-  id: String!
-  name: String!
-}
-
-type Product {
-  id: String!
-  name: String!
-  slug: String!
-  shortDescription: String!
-  fullDescription: String!
-  averageRating: Float!
-  reviewCount: Float!
-  manufacturer: ProductManufacturer!
-}
-
-type CompanySuggestionCompany {
-  id: String!
-  name: String!
-}
-
-type CompanySuggestion {
-  id: String!
-  name: String!
-  status: SuggestionStatus!
-  author: User!
-  notes: String!
-
-  """
-  Refers to the company the suggestion refers to. Null if it's a new company suggestion.
-  """
-  company: CompanySuggestionCompany
-}
-
-type Company {
-  id: String!
-  name: String!
-  products: [Product!]!
-  productSuggestions: [ProductSuggestion!]!
-  suggestions: [CompanySuggestion!]!
-}
-
 type Query {
-  company(id: ID!): Company!
-  companySuggestions: [CompanySuggestion!]!
-  companySuggestion(id: String!): CompanySuggestion!
-  productSuggestion(id: String!): ProductSuggestion!
-  product(id: String!): Product!
   users: [User!]!
 }
 
 type Mutation {
-  createCompanySuggestion(input: CreateCompanySuggestionInput!): CompanySuggestion!
-  approveCompanySuggestion(id: String!): CompanySuggestion!
-  rejectCompanySuggestion(id: String!): CompanySuggestion!
-  createProductSuggestion(input: CreateProductSuggestionInput!): ProductSuggestion!
-  approveProductSuggestion(id: String!): Product!
-  rejectProductSuggestion(id: String!): ProductSuggestion!
   createUser(input: CreateUserInput!): User!
-}
-
-input CreateCompanySuggestionInput {
-  name: String!
-  notes: String!
-  authorId: String!
-}
-
-input CreateProductSuggestionInput {
-  name: String!
-  shortDescription: String!
-  fullDescription: String!
-  notes: String!
-  authorId: String!
-  manufacturerId: String!
 }
 
 input CreateUserInput {

@@ -1,12 +1,4 @@
-import { CompanySuggestionEntity } from "src/company/entities";
-import { ProductSuggestionEntity } from "src/product/entities";
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  type Relation,
-} from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "user" })
 export class UserEntity {
@@ -30,10 +22,4 @@ export class UserEntity {
 
   @Column({ default: false })
   isMember: boolean;
-
-  @OneToMany(() => ProductSuggestionEntity, (suggestion) => suggestion.author)
-  productSuggestions?: Relation<ProductSuggestionEntity>[];
-
-  @OneToMany(() => CompanySuggestionEntity, (suggestion) => suggestion.author)
-  companySuggestions?: Relation<ProductSuggestionEntity>[];
 }

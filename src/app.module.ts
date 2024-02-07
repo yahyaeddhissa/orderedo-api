@@ -5,10 +5,10 @@ import { GraphQLModule as NestGraphQLModule } from "@nestjs/graphql";
 import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ProductModule } from "./product/product.module";
 import { UserModule } from "./user/user.module";
 import { join } from "path";
-import { CompanyModule } from "./company/company.module";
+import { EventEmitterModule } from "@nestjs/event-emitter";
+import { UserEntity } from "./user/entities";
 
 const DatabaseModule = TypeOrmModule.forRoot({
   type: "postgres",
@@ -17,8 +17,8 @@ const DatabaseModule = TypeOrmModule.forRoot({
   username: "postgres",
   password: "postgres",
   database: "postgres",
-  autoLoadEntities: true,
   synchronize: true,
+  entities: [UserEntity],
 });
 
 const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
@@ -26,17 +26,13 @@ const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
   autoSchemaFile: join(process.cwd(), "src/schema.graphql"),
   playground: false,
   plugins: [ApolloServerPluginLandingPageLocalDefault()],
-  include: [UserModule, ProductModule, CompanyModule],
+  include: [UserModule],
 });
 
+const EventsModule = EventEmitterModule.forRoot();
+
 @Module({
-  imports: [
-    DatabaseModule,
-    GraphQLModule,
-    UserModule,
-    ProductModule,
-    CompanyModule,
-  ],
+  imports: [DatabaseModule, GraphQLModule, EventsModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })
