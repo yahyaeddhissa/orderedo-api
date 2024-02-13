@@ -2,8 +2,8 @@ import {
   Field,
   ID,
   InputType,
+  InterfaceType,
   ObjectType,
-  createUnionType,
 } from "@nestjs/graphql";
 import { User } from "src/user/models/user.model";
 
@@ -16,8 +16,18 @@ export class FullDescriptionParagraph {
   text: string;
 }
 
-@ObjectType()
-export class Product {
+@InterfaceType({
+  resolveType(product) {
+    if (product.approvedBy) {
+      return PublicProduct;
+    }
+    if (product.rejectedBy) {
+      return RejectedProduct;
+    }
+    return PendingProduct;
+  },
+})
+export abstract class Product {
   @Field(() => ID)
   id: string;
 
@@ -34,13 +44,17 @@ export class Product {
   averageRating?: number;
 }
 
-@ObjectType()
+@ObjectType({
+  implements: () => [Product],
+})
 export class PendingProduct extends Product {
   @Field(() => User)
   author: User;
 }
 
-@ObjectType()
+@ObjectType({
+  implements: () => [Product],
+})
 export class RejectedProduct extends Product {
   @Field(() => User)
   author: User;
@@ -49,18 +63,13 @@ export class RejectedProduct extends Product {
   rejectedBy: User;
 }
 
-@ObjectType()
+@ObjectType({
+  implements: () => [Product],
+})
 export class PublicProduct extends Product {
   @Field(() => User)
   approvedBy: User;
 }
-
-export type ProductResult = PendingProduct | PublicProduct | RejectedProduct;
-
-export const ProductResult = createUnionType({
-  name: "ProductResult",
-  types: () => [PublicProduct, PendingProduct, RejectedProduct] as const,
-});
 
 @InputType()
 export class FullDescriptionParagraphInput {
