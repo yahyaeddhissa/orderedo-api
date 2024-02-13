@@ -63,4 +63,8 @@ export class ProductService {
       throw new BadRequestException("Something went wrong.");
     }
   }
+
+  public async findProduct(id: string): Promise<Product | null> {
+    return this.productRepository.findOneBy({ id });
+  }
 }

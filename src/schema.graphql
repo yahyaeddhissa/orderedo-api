@@ -53,7 +53,7 @@ type PublicProduct implements Product {
 type Query {
   review(id: String!): ReviewResult!
   productReviews(id: String!): [ReviewResult!]!
-  product: Product!
+  product(id: String!): Product!
   users: [User!]!
 }
 
