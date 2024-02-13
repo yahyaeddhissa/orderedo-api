@@ -4,44 +4,57 @@
 
 type User {
   id: ID!
-  email: String!
+  email: String
   name: String!
-  isVerified: Boolean!
   isMember: Boolean!
 }
 
-type ReviewProduct {
-  id: String!
-  name: String!
-  slug: String!
+type FullDescriptionParagraph {
+  title: String!
+  text: String!
 }
 
-type ReviewAuthor {
+type Product {
   id: ID!
   name: String!
-  isVerified: Boolean!
-  isMember: Boolean!
-}
-
-type ReviewAdmin {
-  id: ID!
-  name: String!
-}
-
-type ApprovedReview {
-  id: ID!
-  author: ReviewAuthor!
-  product: ReviewProduct!
-  rating: Float!
-  content: String!
-  approver: ReviewAdmin!
+  shortDescription: String
+  fullDescription: [FullDescriptionParagraph!]
+  averageRating: Float
 }
 
 type Query {
-  review(id: String!): ApprovedReview!
-  productReviews(id: String!): [ApprovedReview!]!
+  review(id: String!): ReviewResult!
+  productReviews(id: String!): [ReviewResult!]!
   product: ProductResult!
   users: [User!]!
+}
+
+union ReviewResult = PendingReview | PublicReview | RejectedReview
+
+type PendingReview {
+  id: ID!
+  author: User!
+  product: Product!
+  rating: Float!
+  content: String!
+}
+
+type PublicReview {
+  id: ID!
+  author: User!
+  product: Product!
+  rating: Float!
+  content: String!
+  approvedBy: User!
+}
+
+type RejectedReview {
+  id: ID!
+  author: User!
+  product: Product!
+  rating: Float!
+  content: String!
+  rejectedBy: User!
 }
 
 union ProductResult = PublicProduct | PendingProduct | RejectedProduct
@@ -49,36 +62,45 @@ union ProductResult = PublicProduct | PendingProduct | RejectedProduct
 type PublicProduct {
   id: ID!
   name: String!
-  slug: String!
-  shortDescription: String!
-  fullDescription: String!
-  averageRating: Float!
+  shortDescription: String
+  fullDescription: [FullDescriptionParagraph!]
+  averageRating: Float
   approvedBy: User!
 }
 
 type PendingProduct {
   id: ID!
   name: String!
-  slug: String!
-  shortDescription: String!
-  fullDescription: String!
-  averageRating: Float!
+  shortDescription: String
+  fullDescription: [FullDescriptionParagraph!]
+  averageRating: Float
   author: User!
 }
 
 type RejectedProduct {
   id: ID!
   name: String!
-  slug: String!
-  shortDescription: String!
-  fullDescription: String!
-  averageRating: Float!
+  shortDescription: String
+  fullDescription: [FullDescriptionParagraph!]
+  averageRating: Float
   author: User!
   rejectedBy: User!
 }
 
 type Mutation {
+  createProduct(input: ProductCreateInput!): ProductResult!
   createUser(input: CreateUserInput!): User!
+}
+
+input ProductCreateInput {
+  name: String!
+  shortDescription: String!
+  fullDescription: [FullDescriptionParagraphInput!]!
+}
+
+input FullDescriptionParagraphInput {
+  title: String!
+  text: String!
 }
 
 input CreateUserInput {

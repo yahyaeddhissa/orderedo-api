@@ -18,8 +18,5 @@ export class UserEntity {
   lastName: string;
 
   @Column({ default: false })
-  isVerified: boolean;
-
-  @Column({ default: false })
   isMember: boolean;
 }

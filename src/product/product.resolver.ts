@@ -1,28 +1,40 @@
-import { Query, Resolver } from "@nestjs/graphql";
-import { ProductResult, PublicProduct } from "./product.model";
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
+import { ProductCreateInput, ProductResult, PublicProduct } from "./models";
+import { ProductService } from "./product.service";
 
 const product: PublicProduct = {
   id: "dzdfqfef7e8545465",
-  slug: "centrale-whole-uht-milk-500ml",
   name: "Centrale Whole UHT Milk 500 ml",
   averageRating: 4.6,
   shortDescription:
     "Full-cream milk 0.5 L is perfect for taking care of everyone in the family, its unique flavour preserves all the nutritional values of traditional milk.",
-  fullDescription: `Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-    The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.`,
+  fullDescription: [
+    {
+      title: "What is Centrale Whole Milk 0.5 L",
+      text: "The half-litre format is easy to transport and very useful for households with few members that don't consume traditional Tetrapak cartons. Also, its modern packaging includes a stopper to make it easier to serve and store in your fridge. Just unscrew it and it's ready to serve! You can find 0.5 L full-cream milk in your usual supermarket and buy the Tetrapak cartons individually or in packs of six. Whatever is most convenient for you.",
+    },
+  ],
   approvedBy: {
     id: "165165",
     name: "Yahya Eddhissa",
     email: "zefzfezfe@fefe.com",
     isMember: true,
-    isVerified: true,
   },
 };
 
 @Resolver(() => ProductResult)
 export class ProductResolver {
+  constructor(private readonly productService: ProductService) {}
+
   @Query(() => ProductResult, { name: "product" })
   public async getProduct(): Promise<typeof ProductResult> {
     return Promise.resolve(product);
+  }
+
+  @Mutation(() => ProductResult)
+  public async createProduct(
+    @Args("input") input: ProductCreateInput,
+  ): Promise<typeof ProductResult> {
+    return this.productService.createProduct(input);
   }
 }
