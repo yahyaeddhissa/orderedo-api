@@ -5,12 +5,10 @@ import {
   PendingProduct,
   Product,
   ProductCreateInput,
-  ProductResult,
   PublicProduct,
   RejectedProduct,
 } from "./models";
 import { BadRequestException } from "@nestjs/common";
-import { match } from "ts-pattern";
 import { UserService } from "src/user/user.service";
 
 export class ProductService {
@@ -21,7 +19,7 @@ export class ProductService {
     private readonly userService: UserService,
   ) {}
 
-  public fromEntity(entity: ProductEntity): ProductResult {
+  public fromEntity(entity: ProductEntity): Product {
     const product: Product = {
       id: entity.id,
       name: entity.name,
@@ -30,36 +28,33 @@ export class ProductService {
       shortDescription: entity.shortDescription,
     };
 
-    return match<ProductStatus, ProductResult>(entity.status)
-      .with(ProductStatus.PENDING, () => {
-        const author = entity.pendingSuggestion.author;
+    switch (entity.status) {
+      case ProductStatus.PENDING:
         return {
-          author: this.userService.fromEntity(author),
+          author: this.userService.fromEntity(entity.pendingSuggestion.author),
           ...product,
         } as PendingProduct;
-      })
-      .with(ProductStatus.REJECTED, () => {
-        const author = entity.pendingSuggestion.author;
-        const rejectedBy = entity.rejectedSuggestion.rejector;
+      case ProductStatus.REJECTED:
         return {
-          author: this.userService.fromEntity(author),
-          rejectedBy: this.userService.fromEntity(rejectedBy),
+          author: this.userService.fromEntity(entity.pendingSuggestion.author),
+          rejectedBy: this.userService.fromEntity(
+            entity.rejectedSuggestion.rejector,
+          ),
           ...product,
         } as RejectedProduct;
-      })
-      .with(ProductStatus.PUBLIC, () => {
-        const author = entity.pendingSuggestion.author;
-        const approvedBy = entity.approvedSuggestion.approver;
+      case ProductStatus.PUBLIC:
         return {
-          author: this.userService.fromEntity(author),
-          approvedBy: this.userService.fromEntity(approvedBy),
+          approvedBy: this.userService.fromEntity(
+            entity.approvedSuggestion.approver,
+          ),
           ...product,
         } as PublicProduct;
-      })
-      .run();
+      default:
+        throw new BadRequestException("Invalid product status");
+    }
   }
 
-  public async createProduct(data: ProductCreateInput): Promise<ProductResult> {
+  public async createProduct(data: ProductCreateInput): Promise<Product> {
     const product = this.productRepository.create(data);
     try {
       const createdProduct = await this.productRepository.save(product);
