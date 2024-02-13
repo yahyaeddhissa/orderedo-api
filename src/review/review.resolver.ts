@@ -1,7 +1,7 @@
 import { Args, Query, Resolver } from "@nestjs/graphql";
-import { Review } from "./review.model";
+import { PublicReview, ReviewResult } from "./review.model";
 
-const review: Review = {
+const review: PublicReview = {
   id: "fdfdzedze",
   content:
     "Aliquid aut accusamus doloremque omnis. Harum vel dolorem unde reprehenderit et. Deserunt alias alias possimus magnam molestiae ut laboriosam at. Qui perspiciatis assumenda et beatae tempore tempore optio. Velit minima voluptas et.",
@@ -23,15 +23,18 @@ const review: Review = {
   },
 };
 
-@Resolver(() => Review)
+@Resolver(() => ReviewResult)
 export class ReviewResolver {
-  @Query(() => Review, { name: "review" })
-  public async getReview(): Promise<Review> {
+  @Query(() => ReviewResult, { name: "review" })
+  public async getReview(@Args("id") id: string): Promise<typeof ReviewResult> {
+    console.log(id);
     return Promise.resolve(review);
   }
 
-  @Query(() => [Review], { name: "productReviews" })
-  public async getProductReviews(@Args("id") id: string): Promise<Review[]> {
+  @Query(() => [ReviewResult], { name: "productReviews" })
+  public async getProductReviews(
+    @Args("id") id: string,
+  ): Promise<(typeof ReviewResult)[]> {
     console.log(id);
     return Promise.resolve([review, review, review]);
   }

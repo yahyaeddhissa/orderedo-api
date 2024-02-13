@@ -1,58 +1,41 @@
-import { Field, ID, ObjectType } from "@nestjs/graphql";
-
-@ObjectType()
-export class ReviewProduct {
-  @Field()
-  id: string;
-
-  @Field()
-  name: string;
-
-  @Field()
-  slug: string;
-}
-
-@ObjectType()
-export class ReviewAuthor {
-  @Field(() => ID)
-  id: string;
-
-  @Field()
-  name: string;
-
-  @Field()
-  isVerified: boolean;
-
-  @Field()
-  isMember: boolean;
-}
-
-@ObjectType()
-export class ReviewApprover {
-  @Field(() => ID)
-  id: string;
-
-  @Field()
-  name: string;
-}
+import { Field, ID, ObjectType, createUnionType } from "@nestjs/graphql";
+import { Product } from "src/product/product.model";
+import { User } from "src/user/models/user.model";
 
 @ObjectType()
 export class Review {
   @Field(() => ID)
   id: string;
 
-  @Field(() => ReviewAuthor)
-  author: ReviewAuthor;
+  @Field(() => User)
+  author: User;
 
-  @Field(() => ReviewProduct)
-  product: ReviewProduct;
+  @Field(() => Product)
+  product: Product;
 
   @Field()
   rating: number;
 
   @Field()
   content: string;
-
-  @Field(() => ReviewApprover)
-  approver: ReviewApprover;
 }
+
+@ObjectType()
+export class PendingReview extends Review {}
+
+@ObjectType()
+export class PublicReview extends Review {
+  @Field(() => User)
+  approvedBy: User;
+}
+
+@ObjectType()
+export class RejectedReview extends Review {
+  @Field(() => User)
+  rejectedBy: User;
+}
+
+export const ReviewResult = createUnionType({
+  name: "ReviewResult",
+  types: () => [PendingReview, PublicReview, RejectedReview] as const,
+});
