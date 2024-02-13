@@ -10,15 +10,6 @@ type User {
   isMember: Boolean!
 }
 
-type Product {
-  id: ID!
-  name: String!
-  slug: String!
-  shortDescription: String!
-  fullDescription: String!
-  averageRating: Float!
-}
-
 type ReviewProduct {
   id: String!
   name: String!
@@ -32,25 +23,58 @@ type ReviewAuthor {
   isMember: Boolean!
 }
 
-type ReviewApprover {
+type ReviewAdmin {
   id: ID!
   name: String!
 }
 
-type Review {
+type ApprovedReview {
   id: ID!
   author: ReviewAuthor!
   product: ReviewProduct!
   rating: Float!
   content: String!
-  approver: ReviewApprover!
+  approver: ReviewAdmin!
 }
 
 type Query {
-  review: Review!
-  productReviews(id: String!): [Review!]!
-  product: Product!
+  review(id: String!): ApprovedReview!
+  productReviews(id: String!): [ApprovedReview!]!
+  product: ProductResult!
   users: [User!]!
+}
+
+union ProductResult = PublicProduct | PendingProduct | RejectedProduct
+
+type PublicProduct {
+  id: ID!
+  name: String!
+  slug: String!
+  shortDescription: String!
+  fullDescription: String!
+  averageRating: Float!
+  approvedBy: User!
+}
+
+type PendingProduct {
+  id: ID!
+  name: String!
+  slug: String!
+  shortDescription: String!
+  fullDescription: String!
+  averageRating: Float!
+  author: User!
+}
+
+type RejectedProduct {
+  id: ID!
+  name: String!
+  slug: String!
+  shortDescription: String!
+  fullDescription: String!
+  averageRating: Float!
+  author: User!
+  rejectedBy: User!
 }
 
 type Mutation {
