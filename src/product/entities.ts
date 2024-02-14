@@ -3,7 +3,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  Relation,
+  type Relation,
   OneToOne,
   JoinColumn,
   ManyToOne,

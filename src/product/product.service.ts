@@ -1,13 +1,7 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { ProductEntity, ProductStatus } from "./entities";
 import { Repository } from "typeorm";
-import {
-  PendingProduct,
-  Product,
-  ProductCreateInput,
-  PublicProduct,
-  RejectedProduct,
-} from "./models";
+import { Product, ProductCreateInput } from "./models";
 import { BadRequestException } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
 
@@ -20,51 +14,53 @@ export class ProductService {
   ) {}
 
   public fromEntity(entity: ProductEntity): Product {
-    const product: Product = {
-      id: entity.id,
-      name: entity.name,
-      averageRating: entity.averageRating,
-      fullDescription: entity.fullDescription,
-      shortDescription: entity.shortDescription,
-    };
+    const { id, name, averageRating, fullDescription, shortDescription } =
+      entity;
 
-    switch (entity.status) {
-      case ProductStatus.PENDING:
-        return {
-          author: this.userService.fromEntity(entity.pendingSuggestion.author),
-          ...product,
-        } as PendingProduct;
-      case ProductStatus.REJECTED:
-        return {
-          author: this.userService.fromEntity(entity.pendingSuggestion.author),
-          rejectedBy: this.userService.fromEntity(
-            entity.rejectedSuggestion.rejector,
-          ),
-          ...product,
-        } as RejectedProduct;
-      case ProductStatus.PUBLIC:
-        return {
-          approvedBy: this.userService.fromEntity(
-            entity.approvedSuggestion.approver,
-          ),
-          ...product,
-        } as PublicProduct;
-      default:
-        throw new BadRequestException("Invalid product status");
-    }
+    return {
+      id,
+      name,
+      averageRating,
+      fullDescription,
+      shortDescription,
+      ...(entity.status === ProductStatus.PENDING
+        ? {
+            author: this.userService.fromEntity(
+              entity.pendingSuggestion.author,
+            ),
+          }
+        : entity.status === ProductStatus.REJECTED
+          ? {
+              author: this.userService.fromEntity(
+                entity.pendingSuggestion.author,
+              ),
+              rejectedBy: this.userService.fromEntity(
+                entity.rejectedSuggestion.rejector,
+              ),
+            }
+          : {
+              approvedBy: this.userService.fromEntity(
+                entity.approvedSuggestion.approver,
+              ),
+            }),
+    } as Product;
   }
 
   public async createProduct(data: ProductCreateInput): Promise<Product> {
     const product = this.productRepository.create(data);
+
     try {
       const createdProduct = await this.productRepository.save(product);
       return this.fromEntity(createdProduct);
-    } catch {
-      throw new BadRequestException("Something went wrong.");
+    } catch (error) {
+      throw new BadRequestException(
+        "Failed to create product: " + error.message,
+      );
     }
   }
 
   public async findProduct(id: string): Promise<Product | null> {
-    return this.productRepository.findOneBy({ id });
+    const entity = await this.productRepository.findOneBy({ id });
+    return entity ? this.fromEntity(entity) : null;
   }
 }
