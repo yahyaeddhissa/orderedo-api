@@ -8,7 +8,6 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
 import { join } from "path";
 import { EventEmitterModule } from "@nestjs/event-emitter";
-import { UserEntity } from "./user/entities";
 import { ProductModule } from "./product/product.module";
 import { ReviewModule } from "./review/review.module";
 
@@ -20,7 +19,7 @@ const DatabaseModule = TypeOrmModule.forRoot({
   password: "postgres",
   database: "postgres",
   synchronize: true,
-  entities: [UserEntity],
+  autoLoadEntities: true,
 });
 
 const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
@@ -29,6 +28,7 @@ const GraphQLModule = NestGraphQLModule.forRoot<ApolloDriverConfig>({
   playground: false,
   plugins: [ApolloServerPluginLandingPageLocalDefault()],
   include: [UserModule, ProductModule, ReviewModule],
+  context: ({ req }: { req: Request }) => ({ req: req }),
 });
 
 const EventsModule = EventEmitterModule.forRoot();

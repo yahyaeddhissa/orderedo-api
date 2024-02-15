@@ -2,14 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-interface Product {
-  id: ID!
-  name: String!
-  shortDescription: String
-  fullDescription: [FullDescriptionParagraph!]
-  averageRating: Float
-}
-
 type User {
   id: ID!
   email: String
@@ -17,43 +9,27 @@ type User {
   isMember: Boolean!
 }
 
+type LogInResponse {
+  token: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  shortDescription: String
+  fullDescription: [FullDescriptionParagraph!]
+  averageRating: Float
+}
+
 type FullDescriptionParagraph {
   title: String!
   text: String!
 }
 
-type PendingProduct implements Product {
-  id: ID!
-  name: String!
-  shortDescription: String
-  fullDescription: [FullDescriptionParagraph!]
-  averageRating: Float
-  author: User!
-}
-
-type RejectedProduct implements Product {
-  id: ID!
-  name: String!
-  shortDescription: String
-  fullDescription: [FullDescriptionParagraph!]
-  averageRating: Float
-  author: User!
-  rejectedBy: User!
-}
-
-type PublicProduct implements Product {
-  id: ID!
-  name: String!
-  shortDescription: String
-  fullDescription: [FullDescriptionParagraph!]
-  averageRating: Float
-  approvedBy: User!
-}
-
 type Query {
   review(id: String!): ReviewResult!
   productReviews(id: String!): [ReviewResult!]!
-  product(id: String!): Product!
+  product(id: String!): Product
   users: [User!]!
 }
 
@@ -88,6 +64,7 @@ type RejectedReview {
 type Mutation {
   createProduct(input: ProductCreateInput!): Product!
   createUser(input: CreateUserInput!): User!
+  logIn(email: String!, passowrd: String!): LogInResponse!
 }
 
 input ProductCreateInput {

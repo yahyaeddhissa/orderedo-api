@@ -1,13 +1,15 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UserEntity } from "./entities";
+import { SessionEntity, UserEntity } from "./entities";
 import { UserService } from "./user.service";
 import { UserResolver } from "./user.resolver";
+import { AuthService } from "./auth.service";
+import { SessionService } from "./session.service";
 
-const TypeOrmEntities = TypeOrmModule.forFeature([UserEntity]);
+const TypeOrmEntities = TypeOrmModule.forFeature([UserEntity, SessionEntity]);
 
 @Module({
-  providers: [UserService, UserResolver],
+  providers: [UserService, AuthService, SessionService, UserResolver],
   imports: [TypeOrmEntities],
   exports: [TypeOrmModule],
 })

@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity({ name: "user" })
 export class UserEntity {
@@ -19,4 +25,30 @@ export class UserEntity {
 
   @Column({ default: false })
   isMember: boolean;
+
+  @OneToMany(() => SessionEntity, (session) => session.user)
+  sessions: SessionEntity[];
+}
+
+@Entity({ name: "sessions" })
+export class SessionEntity {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Column({ type: "date" })
+  expiresAt: Date;
+
+  @Column({ unique: true })
+  token: string;
+
+  @Column({
+    type: "simple-json",
+  })
+  data: string;
+
+  @ManyToOne(() => UserEntity, (user) => user.sessions)
+  user: UserEntity;
+
+  @Column()
+  userId: string;
 }

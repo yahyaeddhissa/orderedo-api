@@ -43,3 +43,9 @@ export class CreateUserInput {
   @Field()
   password: string;
 }
+
+@ObjectType()
+export class LogInResponse {
+  @Field()
+  token: string;
+}

@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./entities";
 import { Repository } from "typeorm";
 import { CreateUserInput, User } from "./models";
+import bcrypt from "bcrypt";
 
 /**
  * Service for managing user-related operations.
@@ -57,9 +58,21 @@ export class UserService {
    * @param data - The input data for creating the user.
    * @returns A Promise that resolves to the created User object.
    */
-  async createUser(data: CreateUserInput): Promise<User> {
-    const userEntity = this.userRepository.create(data);
+  async createUser({ password, ...data }: CreateUserInput): Promise<User> {
+    const userEntity = this.userRepository.create({
+      ...data,
+      password: await bcrypt.hash(password, 10),
+    });
     const user = await this.userRepository.save(userEntity);
     return this.fromEntity(user);
+  }
+
+  public async findEntityByEmail(email: string): Promise<UserEntity> {
+    return this.userRepository.findOneBy({ email });
+  }
+
+  public async findByEmail(email: string): Promise<User> {
+    const entity = await this.findEntityByEmail(email);
+    return this.fromEntity(entity);
   }
 }
