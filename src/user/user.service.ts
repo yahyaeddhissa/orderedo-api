@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserEntity } from "./entities";
 import { Repository } from "typeorm";
-import { CreateUserInput, User } from "./models/user.model";
+import { CreateUserInput, User } from "./models";
 
 /**
  * Service for managing user-related operations.
