@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, createUnionType } from "@nestjs/graphql";
 import { Product } from "src/product/models";
-import { User } from "src/user/models/user.model";
+import { User } from "src/user/models";
 
 @ObjectType()
 export class Review {

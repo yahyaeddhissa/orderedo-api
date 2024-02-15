@@ -1,33 +1,7 @@
-import {
-  Field,
-  ID,
-  InputType,
-  InterfaceType,
-  ObjectType,
-} from "@nestjs/graphql";
-import { User } from "src/user/models/user.model";
+import { Field, ID, InputType, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
-export class FullDescriptionParagraph {
-  @Field()
-  title: string;
-
-  @Field()
-  text: string;
-}
-
-@InterfaceType({
-  resolveType(product) {
-    if (product.approvedBy) {
-      return PublicProduct;
-    }
-    if (product.rejectedBy) {
-      return RejectedProduct;
-    }
-    return PendingProduct;
-  },
-})
-export abstract class Product {
+export class Product {
   @Field(() => ID)
   id: string;
 
@@ -44,32 +18,69 @@ export abstract class Product {
   averageRating?: number;
 }
 
-@ObjectType({
-  implements: () => [Product],
-})
-export class PendingProduct extends Product {
-  @Field(() => User)
-  author: User;
+@ObjectType()
+export class FullDescriptionParagraph {
+  @Field()
+  title: string;
+
+  @Field()
+  text: string;
 }
 
-@ObjectType({
-  implements: () => [Product],
-})
-export class RejectedProduct extends Product {
-  @Field(() => User)
-  author: User;
+// @InterfaceType({
+//   resolveType(product) {
+//     if (product.approvedBy) {
+//       return PublicProduct;
+//     }
+//     if (product.rejectedBy) {
+//       return RejectedProduct;
+//     }
+//     return PendingProduct;
+//   },
+// })
+// export abstract class Product {
+//   @Field(() => ID)
+//   id: string;
 
-  @Field(() => User)
-  rejectedBy: User;
-}
+//   @Field()
+//   name: string;
 
-@ObjectType({
-  implements: () => [Product],
-})
-export class PublicProduct extends Product {
-  @Field(() => User)
-  approvedBy: User;
-}
+//   @Field({ nullable: true })
+//   shortDescription?: string;
+
+//   @Field(() => [FullDescriptionParagraph], { nullable: true })
+//   fullDescription?: FullDescriptionParagraph[];
+
+//   @Field({ nullable: true })
+//   averageRating?: number;
+// }
+
+// @ObjectType({
+//   implements: () => [Product],
+// })
+// export class PendingProduct extends Product {
+//   @Field(() => User)
+//   author: User;
+// }
+
+// @ObjectType({
+//   implements: () => [Product],
+// })
+// export class RejectedProduct extends Product {
+//   @Field(() => User)
+//   author: User;
+
+//   @Field(() => User)
+//   rejectedBy: User;
+// }
+
+// @ObjectType({
+//   implements: () => [Product],
+// })
+// export class PublicProduct extends Product {
+//   @Field(() => User)
+//   approvedBy: User;
+// }
 
 @InputType()
 export class FullDescriptionParagraphInput {

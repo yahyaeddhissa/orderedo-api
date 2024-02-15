@@ -1,5 +1,5 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { ProductEntity, ProductStatus } from "./entities";
+import { ProductEntity } from "./entities";
 import { Repository } from "typeorm";
 import { Product, ProductCreateInput } from "./models";
 import { BadRequestException } from "@nestjs/common";
@@ -14,8 +14,14 @@ export class ProductService {
   ) {}
 
   public fromEntity(entity: ProductEntity): Product {
-    const { id, name, averageRating, fullDescription, shortDescription } =
-      entity;
+    const {
+      id,
+      name,
+      averageRating,
+      fullDescription,
+      shortDescription,
+      reviewCount,
+    } = entity;
 
     return {
       id,
@@ -23,35 +29,20 @@ export class ProductService {
       averageRating,
       fullDescription,
       shortDescription,
-      ...(entity.status === ProductStatus.PENDING
-        ? {
-            author: this.userService.fromEntity(
-              entity.pendingSuggestion.author,
-            ),
-          }
-        : entity.status === ProductStatus.REJECTED
-          ? {
-              author: this.userService.fromEntity(
-                entity.pendingSuggestion.author,
-              ),
-              rejectedBy: this.userService.fromEntity(
-                entity.rejectedSuggestion.rejector,
-              ),
-            }
-          : {
-              approvedBy: this.userService.fromEntity(
-                entity.approvedSuggestion.approver,
-              ),
-            }),
+      reviewCount,
     } as Product;
   }
 
   public async createProduct(data: ProductCreateInput): Promise<Product> {
-    const product = this.productRepository.create(data);
+    const product = this.productRepository.create({
+      ...data,
+    });
 
     try {
       const createdProduct = await this.productRepository.save(product);
-      return this.fromEntity(createdProduct);
+      console.log(createdProduct);
+
+      return this.findProduct(createdProduct.id);
     } catch (error) {
       throw new BadRequestException(
         "Failed to create product: " + error.message,
@@ -60,7 +51,13 @@ export class ProductService {
   }
 
   public async findProduct(id: string): Promise<Product | null> {
-    const entity = await this.productRepository.findOneBy({ id });
+    console.log(id);
+
+    const entity = await this.productRepository.findOne({
+      where: { id },
+    });
+    console.log(entity);
+
     return entity ? this.fromEntity(entity) : null;
   }
 }

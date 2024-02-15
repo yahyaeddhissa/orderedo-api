@@ -46,10 +46,10 @@ import { ProductService } from "./product.service";
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
-  @Query(() => Product, { name: "product" })
+  @Query(() => Product, { name: "product", nullable: true })
   public async findProduct(@Args("id") id: string): Promise<Product | null> {
     const product = await this.productService.findProduct(id);
-    return product;
+    return product || null;
   }
 
   @Mutation(() => Product)

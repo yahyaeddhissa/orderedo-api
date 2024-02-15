@@ -1,13 +1,4 @@
-import { UserEntity } from "src/user/entities";
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  type Relation,
-  OneToOne,
-  JoinColumn,
-  ManyToOne,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 export enum ProductStatus {
   PENDING,
@@ -48,69 +39,69 @@ export class ProductEntity {
   })
   status: ProductStatus;
 
-  @OneToOne("PendingProductEntity")
-  pendingSuggestion: Relation<PendingProductEntity>;
+  // @OneToOne("PendingProductEntity")
+  // pendingSuggestion: Relation<PendingProductEntity>;
 
-  @OneToOne("PublicProductEntity")
-  approvedSuggestion: Relation<PublicProductEntity>;
+  // @OneToOne("PublicProductEntity")
+  // approvedSuggestion: Relation<PublicProductEntity>;
 
-  @OneToOne("RejectedProductEntity")
-  rejectedSuggestion: Relation<RejectedProductEntity>;
+  // @OneToOne("RejectedProductEntity")
+  // rejectedSuggestion: Relation<RejectedProductEntity>;
 }
 
-@Entity({ name: "pending_products" })
-export class PendingProductEntity {
-  @OneToOne("ProductEntity")
-  @JoinColumn()
-  product: Relation<ProductEntity>;
+// @Entity({ name: "pending_products" })
+// export class PendingProductEntity {
+//   @OneToOne(() => ProductEntity)
+//   @JoinColumn()
+//   product: Relation<ProductEntity>;
 
-  @Column()
-  productId: string;
+//   @PrimaryColumn()
+//   productId: string;
 
-  @OneToOne("UserEntity")
-  @JoinColumn()
-  author: Relation<UserEntity>;
+//   @OneToOne("UserEntity")
+//   @JoinColumn()
+//   author: Relation<UserEntity>;
 
-  @Column()
-  authorId: string;
-}
+//   @Column()
+//   authorId: string;
+// }
 
-@Entity({ name: "public_products" })
-export class PublicProductEntity {
-  @OneToOne("ProductEntity")
-  @JoinColumn()
-  product: Relation<ProductEntity>;
+// @Entity({ name: "public_products" })
+// export class PublicProductEntity {
+//   @OneToOne(() => ProductEntity)
+//   @JoinColumn()
+//   product: Relation<ProductEntity>;
 
-  @Column()
-  productId: string;
+//   @PrimaryColumn()
+//   productId: string;
 
-  @OneToOne("UserEntity")
-  @JoinColumn()
-  approver: Relation<UserEntity>;
+//   @OneToOne("UserEntity")
+//   @JoinColumn()
+//   approver: Relation<UserEntity>;
 
-  @Column()
-  approverId: string;
-}
+//   @Column()
+//   approverId: string;
+// }
 
-@Entity({ name: "rejected_products" })
-export class RejectedProductEntity {
-  @OneToOne("ProductEntity")
-  @JoinColumn()
-  product: Relation<ProductEntity>;
+// @Entity({ name: "rejected_products" })
+// export class RejectedProductEntity {
+//   @OneToOne(() => ProductEntity)
+//   @JoinColumn()
+//   product: Relation<ProductEntity>;
 
-  @Column()
-  productId: string;
+//   @PrimaryColumn()
+//   productId: string;
 
-  @OneToOne("UserEntity")
-  @JoinColumn()
-  author: Relation<UserEntity>;
+//   @OneToOne("UserEntity")
+//   @JoinColumn()
+//   author: Relation<UserEntity>;
 
-  @Column()
-  authorId: string;
+//   @Column()
+//   authorId: string;
 
-  @ManyToOne("UserEntity")
-  rejector: Relation<UserEntity>;
+//   @ManyToOne("UserEntity")
+//   rejector: Relation<UserEntity>;
 
-  @Column()
-  rejectorId: string;
-}
+//   @Column()
+//   rejectorId: string;
+// }
