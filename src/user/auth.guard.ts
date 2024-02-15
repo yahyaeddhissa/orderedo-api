@@ -18,13 +18,13 @@ export class AuthGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException();
     }
-    try {
-      // Add token encryption
-      const user = this.sessionService.validate(token);
-      context.user = user;
-    } catch (error) {
-      throw error;
-    }
+    // Add token encryption
+    const user = await this.sessionService.validate(token);
+
+    if (!user) return false;
+
+    context.user = user;
+
     return true;
   }
 

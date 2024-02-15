@@ -10,6 +10,7 @@ export class SessionService {
   constructor(
     @InjectRepository(SessionEntity)
     private readonly sessionRepository: Repository<SessionEntity>,
+
     private readonly userService: UserService,
   ) {}
 
@@ -28,14 +29,27 @@ export class SessionService {
     });
   }
 
-  public async validate(token: string): Promise<User> {
+  public async validate(token: string): Promise<User | null> {
     const session = await this.sessionRepository.findOne({
       where: { token },
       relations: { user: true },
     });
-    if (!session) throw new UnauthorizedException("Invalid Session!");
-    if (new Date() > session.expiresAt)
-      throw new UnauthorizedException("Session Expired!");
+    if (!session) return null;
+    if (new Date() > session.expiresAt) return null;
     return this.userService.fromEntity(session.user);
+  }
+
+  public async refresh(token: string): Promise<SessionEntity> {
+    const session = await this.sessionRepository.findOne({
+      where: { token },
+    });
+    if (!session) throw new UnauthorizedException("Invalid Session!");
+
+    const newToken = this.generateSessionToken();
+
+    session.token = newToken;
+    session.expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+    return this.sessionRepository.save(session);
   }
 }
