@@ -1,5 +1,5 @@
 import { Field, ID, InputType, ObjectType } from "@nestjs/graphql";
-import { TextBlock } from "src/shared/models";
+import { TextBlock, TextBlockInput } from "src/shared/models";
 
 @ObjectType()
 export class Product {
@@ -20,15 +20,15 @@ export class Product {
 }
 
 @InputType()
-export class ProductInput {
+export class ProductCreateInput {
   @Field()
   name: string;
 
   @Field()
   shortDescription: string;
 
-  @Field(() => [TextBlock])
-  fullDescription: TextBlock[];
+  @Field(() => [TextBlockInput])
+  fullDescription: TextBlockInput[];
 }
 
 // @InterfaceType({
