@@ -5,7 +5,8 @@
 type User {
   id: ID!
   email: String
-  name: String!
+  firstName: String!
+  lastName: String!
   isMember: Boolean!
 }
 
@@ -13,69 +14,77 @@ type LogInResponse {
   token: String!
 }
 
-type Product {
-  id: ID!
-  name: String!
-  shortDescription: String
-  fullDescription: [FullDescriptionParagraph!]
-  averageRating: Float
-}
-
-type FullDescriptionParagraph {
+type TextBlock {
   title: String!
   text: String!
 }
 
+type Product {
+  id: ID!
+  name: String!
+  shortDescription: String
+  fullDescription: [TextBlock!]
+  averageRating: Float
+}
+
+type Review {
+  id: ID!
+  author: User!
+  product: Product!
+  rating: Float!
+  title: String!
+  overall: [TextBlock!]!
+  advantages: [TextBlock!]!
+  disadvantages: [TextBlock!]!
+}
+
 type Query {
-  review(id: String!): ReviewResult!
-  productReviews(id: String!): [ReviewResult!]!
+  """Returns a Review resource by ID."""
+  review(id: String!): Review
+  reviews(input: ReviewsInput!): [Review]!
+
+  """Returns a Product resource by ID."""
   product(id: String!): Product
   users: [User!]!
 }
 
-union ReviewResult = PendingReview | PublicReview | RejectedReview
-
-type PendingReview {
-  id: ID!
-  author: User!
-  product: Product!
-  rating: Float!
-  content: String!
+input ReviewsInput {
+  filter: ReviewFilter!
 }
 
-type PublicReview {
-  id: ID!
-  author: User!
-  product: Product!
-  rating: Float!
-  content: String!
-  approvedBy: User!
-}
-
-type RejectedReview {
-  id: ID!
-  author: User!
-  product: Product!
-  rating: Float!
-  content: String!
-  rejectedBy: User!
+input ReviewFilter {
+  authorId: ID
+  productId: ID
 }
 
 type Mutation {
-  createProduct(input: ProductCreateInput!): Product!
+  reviewCreate(input: ReviewCreateInput!): Review!
+
+  """Creates a product."""
+  productCreate(input: ProductCreateInput!): Product!
   createUser(input: CreateUserInput!): User!
   logIn(email: String!, passowrd: String!): LogInResponse!
+}
+
+input ReviewCreateInput {
+  authorId: ID!
+  productId: ID!
+  rating: Float!
+  title: String!
+  overall: [TextBlockInput!]!
+  advantages: [TextBlockInput!]!
+  disadvantages: [TextBlockInput!]!
+}
+
+input TextBlockInput {
+  title: String!
+  text: String!
 }
 
 input ProductCreateInput {
   name: String!
   shortDescription: String!
-  fullDescription: [FullDescriptionParagraphInput!]!
-}
-
-input FullDescriptionParagraphInput {
-  title: String!
-  text: String!
+  fullDescription: [TextBlockInput!]!
 }
 
 input CreateUserInput {

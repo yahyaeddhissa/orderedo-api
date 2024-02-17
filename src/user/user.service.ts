@@ -31,7 +31,8 @@ export class UserService {
 
     return {
       id,
-      name: `${firstName} ${lastName}`,
+      firstName,
+      lastName,
       email,
       isMember,
     };
