@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { FindOptionsWhere, Repository } from "typeorm";
 import { ReviewEntity } from "./entities";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Review, ReviewInput } from "./models";
+import { Review, ReviewCreateInput, ReviewFilter } from "./models";
 
 @Injectable()
 export class ReviewService {
@@ -19,7 +19,7 @@ export class ReviewService {
     return entities.map(ReviewService.fromEntity);
   }
 
-  public async createReview(input: ReviewInput): Promise<Review> {
+  public async createReview(input: ReviewCreateInput): Promise<Review> {
     const review = await this.reviewRepository.save(input);
     return ReviewService.fromEntity(review);
   }
@@ -34,11 +34,10 @@ export class ReviewService {
     return ReviewService.fromEntity(review);
   }
 
-  public async findReviews(
-    where: FindOptionsWhere<ReviewEntity>,
-  ): Promise<Review[]> {
+  public async findReviews(filter: ReviewFilter): Promise<Review[]> {
+    const { productId, authorId } = filter;
     const review = await this.reviewRepository.find({
-      where,
+      where: { productId, authorId },
       relations: { author: true, product: true },
     });
     return ReviewService.fromEntities(review);

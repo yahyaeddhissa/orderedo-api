@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { Review, ReviewInput } from "./models";
+import { Review, ReviewCreateInput, ReviewsInput } from "./models";
 import { ReviewService } from "./review.service";
 
 // const review: PublicReview = {
@@ -30,21 +30,22 @@ export class ReviewResolver {
   @Query(() => Review, {
     name: "review",
     description: "Returns a Review resource by ID.",
+    nullable: true,
   })
   public async findReview(@Args("id") id: string): Promise<Review> {
     return this.reviewService.findReview({ id });
   }
 
-  @Query(() => [Review], { name: "reviewsByProduct" })
-  public async findProductReviews(
-    @Args("id") productId: string,
+  @Query(() => [Review], { name: "reviews", nullable: "items" })
+  public async findReviews(
+    @Args("input") input: ReviewsInput,
   ): Promise<Review[]> {
-    return this.reviewService.findReviews({ productId });
+    return this.reviewService.findReviews(input.filter);
   }
 
   @Mutation(() => Review, { name: "reviewCreate" })
   public async createReview(
-    @Args("input") input: ReviewInput,
+    @Args("input") input: ReviewCreateInput,
   ): Promise<Review> {
     return this.reviewService.createReview(input);
   }

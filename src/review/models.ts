@@ -1,6 +1,6 @@
 import { Field, ID, InputType, ObjectType } from "@nestjs/graphql";
 import { Product } from "src/product/models";
-import { TextBlock } from "src/shared/models";
+import { TextBlock, TextBlockInput } from "src/shared/models";
 import { User } from "src/user/models";
 
 @ObjectType()
@@ -31,12 +31,12 @@ export class Review {
 }
 
 @InputType()
-export class ReviewInput {
+export class ReviewCreateInput {
   @Field(() => ID)
   authorId: string;
 
   @Field(() => ID)
-  aproductId: string;
+  productId: string;
 
   @Field()
   rating: number;
@@ -44,14 +44,29 @@ export class ReviewInput {
   @Field()
   title: string;
 
-  @Field(() => [TextBlock])
-  overall: TextBlock[];
+  @Field(() => [TextBlockInput])
+  overall: TextBlockInput[];
 
-  @Field(() => [TextBlock])
-  advantages: TextBlock[];
+  @Field(() => [TextBlockInput])
+  advantages: TextBlockInput[];
 
-  @Field(() => [TextBlock])
-  disadvantages: TextBlock[];
+  @Field(() => [TextBlockInput])
+  disadvantages: TextBlockInput[];
+}
+
+@InputType()
+export class ReviewFilter {
+  @Field(() => ID, { nullable: true })
+  authorId?: string;
+
+  @Field(() => ID, { nullable: true })
+  productId?: string;
+}
+
+@InputType()
+export class ReviewsInput {
+  @Field(() => ReviewFilter)
+  filter: ReviewFilter;
 }
 
 // @ObjectType()
