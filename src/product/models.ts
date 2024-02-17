@@ -1,4 +1,5 @@
 import { Field, ID, InputType, ObjectType } from "@nestjs/graphql";
+import { TextBlock } from "src/shared/models";
 
 @ObjectType()
 export class Product {
@@ -11,20 +12,23 @@ export class Product {
   @Field({ nullable: true })
   shortDescription?: string;
 
-  @Field(() => [FullDescriptionParagraph], { nullable: true })
-  fullDescription?: FullDescriptionParagraph[];
+  @Field(() => [TextBlock], { nullable: true })
+  fullDescription?: TextBlock[];
 
   @Field({ nullable: true })
   averageRating?: number;
 }
 
-@ObjectType()
-export class FullDescriptionParagraph {
+@InputType()
+export class ProductInput {
   @Field()
-  title: string;
+  name: string;
 
   @Field()
-  text: string;
+  shortDescription: string;
+
+  @Field(() => [TextBlock])
+  fullDescription: TextBlock[];
 }
 
 // @InterfaceType({
@@ -81,24 +85,3 @@ export class FullDescriptionParagraph {
 //   @Field(() => User)
 //   approvedBy: User;
 // }
-
-@InputType()
-export class FullDescriptionParagraphInput {
-  @Field()
-  title: string;
-
-  @Field()
-  text: string;
-}
-
-@InputType()
-export class ProductCreateInput {
-  @Field()
-  name: string;
-
-  @Field()
-  shortDescription: string;
-
-  @Field(() => [FullDescriptionParagraphInput])
-  fullDescription: FullDescriptionParagraphInput[];
-}

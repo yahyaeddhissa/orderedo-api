@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { ProductCreateInput, Product } from "./models";
+import { ProductInput, Product } from "./models";
 import { ProductService } from "./product.service";
 
 // const product: PublicProduct = {
@@ -46,15 +46,22 @@ import { ProductService } from "./product.service";
 export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
-  @Query(() => Product, { name: "product", nullable: true })
+  @Query(() => Product, {
+    name: "product",
+    nullable: true,
+    description: "Returns a Product resource by ID.",
+  })
   public async findProduct(@Args("id") id: string): Promise<Product | null> {
     const product = await this.productService.findProduct(id);
     return product || null;
   }
 
-  @Mutation(() => Product)
+  @Mutation(() => Product, {
+    name: "productCreate",
+    description: "Creates a product.",
+  })
   public async createProduct(
-    @Args("input") input: ProductCreateInput,
+    @Args("input") input: ProductInput,
   ): Promise<Product> {
     return this.productService.createProduct(input);
   }
